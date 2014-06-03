@@ -24,7 +24,7 @@ public class MyFragmentPageAdapter extends FragmentStatePagerAdapter {
 	public Fragment getItem(int position) {
 		switch (position) {
 		case 0: 
-			return MyRepoViewListFragment.newInstance();
+			return MyRepoViewListFragment.newInstance(username);
 		case 1:
 			return MyPullRequestViewFragment.newInstance("Pull Request", username, password);
 		default:

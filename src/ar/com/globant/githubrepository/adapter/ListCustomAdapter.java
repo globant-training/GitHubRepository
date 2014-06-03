@@ -2,6 +2,8 @@ package ar.com.globant.githubrepository.adapter;
 
 import java.util.List;
 
+import org.eclipse.egit.github.core.Repository;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,7 @@ public class ListCustomAdapter extends ArrayAdapter<WrapperItem> {
 		
 	public ListCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> lista) {
 		super(myViewFragment, textViewResourceId, lista);
-
+		
 		this.layout = textViewResourceId;
 		this.mContext = myViewFragment;
 		this.lista = lista;
@@ -53,5 +55,10 @@ public class ListCustomAdapter extends ArrayAdapter<WrapperItem> {
 	public static class ItemHolder {
 		TextView mTextTitle;
 		Button mButton;
+	}
+
+	public void setData(List<Repository> data) {
+		for (Repository repo : data) 
+			lista.add(new WrapperItem(repo.getName(), repo));
 	}
 }
