@@ -15,6 +15,8 @@ import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+import ar.com.globant.githubrepository.adapter.MyFragmentPageAdapter;
+import ar.com.globant.githubrepository.fragments.MyPullRequestViewFragment;
 
 public class RepositoriesActivity extends FragmentActivity {
 	
@@ -73,7 +75,7 @@ public class RepositoriesActivity extends FragmentActivity {
     	
     	mt.execute(pr);
     }
-
+    
     // AsyncTask
     private static class MergePRTask extends AsyncTask<PullRequest, Void, MergeStatus> {
         private RepositoriesActivity mActivity;

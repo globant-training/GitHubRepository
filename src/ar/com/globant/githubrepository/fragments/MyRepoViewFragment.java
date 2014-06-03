@@ -1,4 +1,4 @@
-package ar.com.globant.githubrepository;
+package ar.com.globant.githubrepository.fragments;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
+import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.adapter.ListCustomAdapter;
 import ar.com.globant.globant.model.WrapperItem;
 
