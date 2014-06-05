@@ -30,7 +30,7 @@ public class RepositoriesActivity extends FragmentActivity {
 	private ViewPager viewPager;
 	private MyFragmentPageAdapter adapterViewPage;
 	
-	private DialogFragment newFragment;
+	private DialogFragment mDialogLoaging;
 	
 	private int myPullRequestViewFragment;
 	private Repository selectedRepo;
@@ -54,8 +54,13 @@ public class RepositoriesActivity extends FragmentActivity {
 				if (pageNumber == 1 && pressSelected) {
 					
 					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-					newFragment = MyDialogFragment.newInstance();
-					newFragment.show(ft, "dialog");
+					mDialogLoaging = MyDialogFragment.newInstance();
+					mDialogLoaging.show(ft, "dialog");
+				} else if ( selectedRepo == null ){
+					int B = getMyPullRequestViewFragment();
+					MyPullRequestViewFragment myPullRequestViewFragment = (MyPullRequestViewFragment) getSupportFragmentManager().findFragmentById(B);
+					
+					myPullRequestViewFragment.notifyNoRepositorySelected();
 				}
 				
 				pressSelected = false;
@@ -83,7 +88,6 @@ public class RepositoriesActivity extends FragmentActivity {
 		selectedRepo = repo; 
 		
 		int B = this.getMyPullRequestViewFragment();
-		
 		MyPullRequestViewFragment myPullRequestViewFragment = (MyPullRequestViewFragment) this.getSupportFragmentManager().findFragmentById(B);
 		
 		myPullRequestViewFragment.setRepository(repo);
@@ -203,6 +207,6 @@ public class RepositoriesActivity extends FragmentActivity {
 	}
 	
 	public void dialogDismiss(){
-		newFragment.dismiss();
+		mDialogLoaging.dismiss();
 	}
 }

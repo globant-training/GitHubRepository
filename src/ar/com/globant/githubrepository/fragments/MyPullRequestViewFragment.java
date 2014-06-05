@@ -2,15 +2,15 @@ package ar.com.globant.githubrepository.fragments;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Random;
 
 import org.eclipse.egit.github.core.PullRequest;
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.service.PullRequestService;
 import org.eclipse.egit.github.core.service.RepositoryService;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -119,6 +119,8 @@ public class MyPullRequestViewFragment extends Fragment {
 				e1.printStackTrace();
 			}
     		
+    		Collections.sort(results, PULLREQUEST_COMPARATOR);
+
             return results;
         }
     	
@@ -165,4 +167,22 @@ public class MyPullRequestViewFragment extends Fragment {
 		task.execute(repo);
 	}
 	
+    public static final Comparator<PullRequest> PULLREQUEST_COMPARATOR = new Comparator<PullRequest>() {
+
+		@Override
+		public int compare(PullRequest pr1, PullRequest pr2) {
+			if ( pr1 != null && pr2 != null )
+				return pr1.getTitle() .compareToIgnoreCase(pr1.getTitle());
+			return 0;
+		}
+    	
+    };
+
+
+	public void notifyNoRepositorySelected() {
+		TextView mEditText = (TextView) view.findViewById(R.id.emptyText);
+		mEditText.setText("No repository selected!");
+
+		listaCustom.setEmptyView(mEditText);
+	}
 }
