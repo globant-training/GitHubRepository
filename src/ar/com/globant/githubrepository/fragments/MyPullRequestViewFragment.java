@@ -71,11 +71,6 @@ public class MyPullRequestViewFragment extends Fragment {
 		
 		((RepositoriesActivity)getActivity()).setMyPullRequestViewFragment(getId());
 		
-		int color;
-	    Random rnd = new Random(); 
-	    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));   
-	    view.setBackgroundColor(color);		
-	    
 		Log.e("INFO", "Creando el Fragment");
         
 		return view; 

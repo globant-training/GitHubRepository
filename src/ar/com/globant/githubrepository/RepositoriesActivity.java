@@ -34,6 +34,7 @@ public class RepositoriesActivity extends FragmentActivity {
 	
 	private int myPullRequestViewFragment;
 	private Repository selectedRepo;
+	private boolean pressSelected = false;
 	
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,12 +51,14 @@ public class RepositoriesActivity extends FragmentActivity {
 			
 			@Override
 			public void onPageSelected(int pageNumber) {
-				if (pageNumber == 1) {
+				if (pageNumber == 1 && pressSelected) {
 					
 					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 					newFragment = MyDialogFragment.newInstance();
 					newFragment.show(ft, "dialog");
 				}
+				
+				pressSelected = false;
 			}
 			
 			@Override
@@ -72,6 +75,7 @@ public class RepositoriesActivity extends FragmentActivity {
     
 	
 	public void selectRepo(View v) {
+		pressSelected  = true;
 		
 		Button button = (Button) v;
 		Repository repo = (Repository) button.getTag();
@@ -149,8 +153,6 @@ public class RepositoriesActivity extends FragmentActivity {
         
         protected void onPostExecute(MergeStatus status) {
         	mActivity.smashResult(status.getMessage());
-        	
-        	
         }
     }
     

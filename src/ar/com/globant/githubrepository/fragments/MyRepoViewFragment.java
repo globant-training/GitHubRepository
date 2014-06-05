@@ -3,12 +3,10 @@ package ar.com.globant.githubrepository.fragments;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.service.RepositoryService;
 
-import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -61,12 +59,6 @@ public class MyRepoViewFragment extends Fragment {
 		listaCustom = (ListView) view.findViewById(R.id.listViewResult);
 		adapter = new ListRepoCustomAdapter(view.getContext(), R.layout.repo_request_row, lista);
 		listaCustom.setAdapter(adapter);
-		
-		// Colors :)
-		int color;
-	    Random rnd = new Random(); 
-	    color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));   
-	    view.setBackgroundColor(color);		
 		
 		Log.e("INFO", "Creando el Fragment");
 		
@@ -139,7 +131,10 @@ public class MyRepoViewFragment extends Fragment {
     
     private void toMyList(List<Repository> results, boolean doSave) {
        	for (Repository result : results)
-    		lista.add(new WrapperItem(result.getName(), result));
+    		lista.add(new WrapperItem(result.getName(), 
+    								  result,
+    								  result.getDescription(),
+    								  result.getLanguage()));
     	
     	adapter.notifyDataSetChanged();
 	}

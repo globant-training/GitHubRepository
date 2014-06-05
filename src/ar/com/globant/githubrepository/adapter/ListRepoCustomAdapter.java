@@ -35,8 +35,10 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 			convertView = LayoutInflater.from(mContext).inflate(layout, parent, false);
 			
 			itemHolder = new ItemHolder();
-			itemHolder.mTextTitle = (TextView) convertView.findViewById(R.id.reporequestText);
-			itemHolder.mButton 	  = (Button) convertView.findViewById(R.id.selectButton);
+			itemHolder.mTextTitle   = (TextView) convertView.findViewById(R.id.reporequestText);
+			itemHolder.mDescription = (TextView) convertView.findViewById(R.id.description);
+			itemHolder.mLanguage    = (TextView) convertView.findViewById(R.id.language);
+			itemHolder.mButton 	    = (Button) convertView.findViewById(R.id.selectButton);
 			
 			
 			convertView.setTag(itemHolder);
@@ -47,6 +49,19 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 		WrapperItem elemento = lista.get(position);
 		
 		itemHolder.mTextTitle.setText(elemento.getTitle());
+		
+		String description = elemento.getDescription();
+		if ( description != null && !description.isEmpty() )
+			itemHolder.mDescription.setText(description);
+		else
+			itemHolder.mDescription.setText(R.string.no_mesj);
+				
+		String language = elemento.getLanguage();
+		if ( language != null && !language.isEmpty() )
+			itemHolder.mLanguage.setText(language);
+		else
+			itemHolder.mLanguage.setText(R.string.no_mesj);
+		
 		itemHolder.mButton.setTag(elemento.getRepo());
 		
 		return convertView;
@@ -54,11 +69,16 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 	
 	public static class ItemHolder {
 		TextView mTextTitle;
+		TextView mDescription;
+		TextView mLanguage;
 		Button mButton;
 	}
-
+	
 	public void setData(List<Repository> data) {
 		for (Repository repo : data) 
-			lista.add(new WrapperItem(repo.getName(), repo));
+			lista.add(new WrapperItem(repo.getName(), 
+									  repo,
+									  repo.getDescription(),
+									  repo.getLanguage()));
 	}
 }

@@ -11,5 +11,7 @@
     <string name="select">Select</string>
     <string name="merge">Merge</string>
     <string name="show">Show password</string>
+    
+    <string name="no_mesj">-</string>
 
 </resources>

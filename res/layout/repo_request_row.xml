@@ -7,18 +7,36 @@
         android:id="@+id/reporequestText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/selectButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toLeftOf="@+id/selectButton"/>
+        android:layout_toLeftOf="@+id/selectButton"
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/selectButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/language"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:onClick="selectRepo"
-        android:text="@string/select" />
+        android:text="@string/select" 
+        android:background="@drawable/aqua_pin"/>
+
+    <TextView
+        android:id="@+id/description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/reporequestText"
+        android:layout_toLeftOf="@+id/selectButton" />
+
+    <TextView
+        android:id="@+id/language"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/description"
+        android:layout_toLeftOf="@+id/selectButton" />
 
 </RelativeLayout>
