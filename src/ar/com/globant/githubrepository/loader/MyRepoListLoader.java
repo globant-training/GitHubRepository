@@ -11,7 +11,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
 
-public class MyListLoader extends AsyncTaskLoader<List<Repository>> {
+public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 	    
 		List<Repository> listRepositories;
 		String name;
@@ -20,7 +20,7 @@ public class MyListLoader extends AsyncTaskLoader<List<Repository>> {
 	    
 		List<Repository> mApps;
 		
-		public MyListLoader(Context context, String username) {
+		public MyRepoListLoader(Context context, String username) {
 		  super(context);
 		  
 		  name = username;

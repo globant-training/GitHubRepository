@@ -27,7 +27,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:text="nicolaquartieri"
+        android:text="globant-training"
         android:inputType="textEmailAddress" >
 
         <requestFocus />
@@ -56,7 +56,7 @@
         android:layout_marginRight="10dp"
         android:layout_marginTop="10dp"
         android:ems="10"
-        android:text="nicola001"
+        android:text="globant123"
         android:inputType="textPassword" />
 
     <Button

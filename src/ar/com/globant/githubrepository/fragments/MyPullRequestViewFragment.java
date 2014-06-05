@@ -19,7 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.RepositoriesActivity;
 import ar.com.globant.githubrepository.adapter.ListPullRequestCustomAdapter;
@@ -57,10 +57,14 @@ public class MyPullRequestViewFragment extends Fragment {
 	}
 	
 	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_textview, container, false);
 		
-		//TODO
 		listaCustom = (ListView) view.findViewById(R.id.listViewResult);
 		adapter = new ListPullRequestCustomAdapter(view.getContext(), R.layout.pull_request_row, lista);
 		listaCustom.setAdapter(adapter);
@@ -73,7 +77,7 @@ public class MyPullRequestViewFragment extends Fragment {
 	    view.setBackgroundColor(color);		
 	    
 		Log.e("INFO", "Creando el Fragment");
-		
+        
 		return view; 
 	}
 	
@@ -134,10 +138,20 @@ public class MyPullRequestViewFragment extends Fragment {
     }
     
     private void setListResults(List<PullRequest> results) {
-    	if (results != null && !results.isEmpty())
+    	if (results != null && !results.isEmpty()) {
     		toMyList(results, false);
-    	else
-			Toast.makeText(getActivity().getApplicationContext(), "No Open Pull Request found in " + repository.getName(), Toast.LENGTH_SHORT).show();
+    	} else {
+    		lista.clear();
+    		
+    		TextView mEditText = (TextView) view.findViewById(R.id.emptyText);
+    		mEditText.setText("No Open Pull Request found in '" + repository.getName() + "'");
+
+    		listaCustom.setEmptyView(mEditText);
+		}
+    	
+    	adapter.notifyDataSetChanged();
+    	
+    	((RepositoriesActivity)getActivity()).dialogDismiss();
     }
     
     private void toMyList(List<PullRequest> results, boolean doSave) {
@@ -146,8 +160,6 @@ public class MyPullRequestViewFragment extends Fragment {
     		
     		Log.i("INFO", result.toString());
        	}
-    	
-    	adapter.notifyDataSetChanged();
 	}
     
 	public void setRepository(Repository repo) {

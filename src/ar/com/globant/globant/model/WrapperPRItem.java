@@ -6,12 +6,12 @@ import org.eclipse.egit.github.core.PullRequest;
 public class WrapperPRItem {
 
 	private String title;
-	private PullRequest repo;
+	private PullRequest pr;
 
-	public WrapperPRItem(String title, PullRequest repo) {
+	public WrapperPRItem(String title, PullRequest pullrequest) {
 		super();
 		this.title = title;
-		this.repo = repo;
+		this.pr = pullrequest;
 	}
 
 	public String getTitle() {
@@ -23,11 +23,11 @@ public class WrapperPRItem {
 	}
 
 	public PullRequest getPullRequest() {
-		return repo;
+		return pr;
 	}
 
-	public void setPullRequest(PullRequest repo) {
-		this.repo = repo;
+	public void setPullRequest(PullRequest pullrequest) {
+		this.pr = pullrequest;
 	}
 	
 }

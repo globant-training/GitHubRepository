@@ -10,12 +10,16 @@ import org.eclipse.egit.github.core.service.PullRequestService;
 
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 import ar.com.globant.githubrepository.adapter.MyFragmentPageAdapter;
+import ar.com.globant.githubrepository.dialog.MyDialogFragment;
 import ar.com.globant.githubrepository.fragments.MyPullRequestViewFragment;
 
 public class RepositoriesActivity extends FragmentActivity {
@@ -25,6 +29,8 @@ public class RepositoriesActivity extends FragmentActivity {
 	
 	private ViewPager viewPager;
 	private MyFragmentPageAdapter adapterViewPage;
+	
+	private DialogFragment newFragment;
 	
 	private int myPullRequestViewFragment;
 	private Repository selectedRepo;
@@ -39,10 +45,34 @@ public class RepositoriesActivity extends FragmentActivity {
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		adapterViewPage = new MyFragmentPageAdapter(getSupportFragmentManager(), username, password);
 		viewPager.setAdapter(adapterViewPage);
+		
+		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int pageNumber) {
+				if (pageNumber == 1) {
+					
+					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+					newFragment = MyDialogFragment.newInstance();
+					newFragment.show(ft, "dialog");
+				}
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				
+			}
+		});
     }
     
 	
 	public void selectRepo(View v) {
+		
 		Button button = (Button) v;
 		Repository repo = (Repository) button.getTag();
 		
@@ -62,7 +92,7 @@ public class RepositoriesActivity extends FragmentActivity {
 		
 		v.setEnabled(false);
 		
-		//TODO msj
+		//TODO commit msj
 		try {
 			mergePullRequest(pullrequest, "");
 		} catch (IOException e) {
@@ -164,5 +194,13 @@ public class RepositoriesActivity extends FragmentActivity {
 
 	public void setSelectedRepo(Repository selectedRepo) {
 		this.selectedRepo = selectedRepo;
+	}
+
+	public void setViewPage(int i) {
+		viewPager.setCurrentItem(i, true);
+	}
+	
+	public void dialogDismiss(){
+		newFragment.dismiss();
 	}
 }

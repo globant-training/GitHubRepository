@@ -14,13 +14,13 @@ import android.widget.TextView;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.globant.model.WrapperItem;
 
-public class ListCustomAdapter extends ArrayAdapter<WrapperItem> {
+public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 	
 	private Context mContext;
 	private List<WrapperItem> lista;
 	private int layout;
 		
-	public ListCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> lista) {
+	public ListRepoCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> lista) {
 		super(myViewFragment, textViewResourceId, lista);
 		
 		this.layout = textViewResourceId;

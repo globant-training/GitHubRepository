@@ -19,13 +19,13 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 import ar.com.globant.githubrepository.R;
-import ar.com.globant.githubrepository.adapter.ListCustomAdapter;
+import ar.com.globant.githubrepository.adapter.ListRepoCustomAdapter;
 import ar.com.globant.globant.model.WrapperItem;
 
 public class MyRepoViewFragment extends Fragment {
 	
 	private View view = null;
-	private ListCustomAdapter adapter = null;
+	private ListRepoCustomAdapter adapter = null;
 	private ListView listaCustom = null;
 	private String username;
 	
@@ -59,7 +59,7 @@ public class MyRepoViewFragment extends Fragment {
 		task.execute(username);
 		
 		listaCustom = (ListView) view.findViewById(R.id.listViewResult);
-		adapter = new ListCustomAdapter(view.getContext(), R.layout.repo_request_row, lista);
+		adapter = new ListRepoCustomAdapter(view.getContext(), R.layout.repo_request_row, lista);
 		listaCustom.setAdapter(adapter);
 		
 		// Colors :)
