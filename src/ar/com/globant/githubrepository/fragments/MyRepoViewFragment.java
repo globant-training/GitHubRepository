@@ -2,9 +2,12 @@ package ar.com.globant.githubrepository.fragments;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
+import org.eclipse.egit.github.core.RepositoryTag;
 import org.eclipse.egit.github.core.service.RepositoryService;
 
 import android.os.AsyncTask;
@@ -105,6 +108,8 @@ public class MyRepoViewFragment extends Fragment {
 				e1.printStackTrace();
 			}
     		
+    		Collections.sort(results, REPOSITORY_COMPARATOR);
+    		
             return results;
         }
     	
@@ -138,4 +143,15 @@ public class MyRepoViewFragment extends Fragment {
     	
     	adapter.notifyDataSetChanged();
 	}
+    
+    public static final Comparator<Repository> REPOSITORY_COMPARATOR = new Comparator<Repository>() {
+
+		@Override
+		public int compare(Repository repo1, Repository repo2) {
+			if ( repo1 != null && repo2 != null )
+				return repo1.getName().compareToIgnoreCase(repo2.getName());
+			return 0;
+		}
+    	
+    };
 }
