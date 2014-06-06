@@ -8,6 +8,7 @@ public class WrapperPRItem {
 	private String title;
 	private PullRequest pr;
 
+	
 	public WrapperPRItem(String title, PullRequest pullrequest) {
 		super();
 		this.title = title;

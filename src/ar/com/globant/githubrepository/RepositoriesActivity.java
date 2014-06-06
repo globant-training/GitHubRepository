@@ -47,6 +47,7 @@ public class RepositoriesActivity extends FragmentActivity {
 		adapterViewPage = new MyFragmentPageAdapter(getSupportFragmentManager(), username, password);
 		viewPager.setAdapter(adapterViewPage);
 		
+        // TODO Remove Anonymous Class
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			
 			@Override
@@ -115,7 +116,7 @@ public class RepositoriesActivity extends FragmentActivity {
     }
     
     // AsyncTask
-    private static class MergePRTask extends AsyncTask<PullRequest, Void, MergeStatus> {
+    private class MergePRTask extends AsyncTask<PullRequest, Void, MergeStatus> {
         private RepositoriesActivity mActivity;
         
     	public MergePRTask(RepositoriesActivity activity) {

@@ -9,6 +9,7 @@ import ar.com.globant.githubrepository.fragments.MyRepoViewListFragment;
 public class MyFragmentPageAdapter extends FragmentStatePagerAdapter {
 
 	private static final int NUM_PAGES = 2;
+	
 	private String username = null;
 	private String password = null;
 	

@@ -13,12 +13,13 @@ import android.util.Log;
 
 public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 	    
-		List<Repository> listRepositories;
-		String name;
+		private List<Repository> listRepositories;
+		private String name;
 	
 		private List<Repository> results = null;
 	    
-		List<Repository> mApps;
+		private List<Repository> myList;
+		
 		
 		public MyRepoListLoader(Context context, String username) {
 		  super(context);
@@ -26,7 +27,8 @@ public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 		  name = username;
 		}
 		
-		@Override public List<Repository> loadInBackground() {
+		@Override 
+		public List<Repository> loadInBackground() {
 			RepositoryService service = new RepositoryService();
 	    	
 			try {
@@ -43,14 +45,15 @@ public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 	        return results;
 		}
 		
-		@Override public void deliverResult(List<Repository> list) {
+		@Override 
+		public void deliverResult(List<Repository> list) {
 		  if (isReset()) {
 		      if (list != null) {
 		          onReleaseResources(list);
 		      }
 		  }
 		  List<Repository> oldApps = list;
-		  mApps = list;
+		  myList = list;
 		
 		  if (isStarted()) {
 		      super.deliverResult(list);
@@ -61,27 +64,31 @@ public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 		  }
 		}
 		
-		@Override protected void onStartLoading() {
-		  if (mApps != null) {
-		      deliverResult(mApps);
+		@Override 
+		protected void onStartLoading() {
+		  if (myList != null) {
+		      deliverResult(myList);
 		  }
 		
-		  if (takeContentChanged() || mApps == null ) {
+		  if (takeContentChanged() || myList == null ) {
 		      forceLoad();
 		  }
 		}
 		
-		@Override protected void onStopLoading() {
+		@Override 
+		protected void onStopLoading() {
 		  cancelLoad();
 		}
 		
-		@Override public void onCanceled(List<Repository> apps) {
+		@Override 
+		public void onCanceled(List<Repository> apps) {
 		  super.onCanceled(apps);
 		
 		  onReleaseResources(apps);
 		}
 		
-		@Override protected void onReset() {
+		@Override 
+		protected void onReset() {
 		  super.onReset();
 		}
 		

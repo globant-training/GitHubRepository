@@ -19,7 +19,8 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 	private Context mContext;
 	private List<WrapperItem> lista;
 	private int layout;
-		
+	
+	
 	public ListRepoCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> lista) {
 		super(myViewFragment, textViewResourceId, lista);
 		
@@ -39,7 +40,6 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 			itemHolder.mDescription = (TextView) convertView.findViewById(R.id.description);
 			itemHolder.mLanguage    = (TextView) convertView.findViewById(R.id.language);
 			itemHolder.mButton 	    = (Button) convertView.findViewById(R.id.selectButton);
-			
 			
 			convertView.setTag(itemHolder);
 		} else {

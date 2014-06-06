@@ -21,16 +21,14 @@ import ar.com.globant.globant.model.WrapperPRItem;
 
 public class MyPullRequestListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<PullRequest>>{
 
-	static List<WrapperPRItem> apps = new ArrayList<WrapperPRItem>(){};
+	private List<WrapperPRItem> apps = new ArrayList<WrapperPRItem>(){};
 	
-	ListPullRequestCustomAdapter mAdapter;
+	private ListPullRequestCustomAdapter mAdapter;
 	
 	private static String name;
 	private static String pass;
 	
-	private static List<PullRequest> listRepositories;
-
-	private static Repository repo;
+	private Repository repo;
 	
 	
 	public static MyPullRequestListFragment newInstance(String username, String password) {
@@ -70,7 +68,7 @@ public class MyPullRequestListFragment extends ListFragment implements LoaderMan
 	
 	@Override
 	public void onLoadFinished(Loader<List<PullRequest>> arg0, List<PullRequest> data) {
-
+		
 		mAdapter.setData(data);
 		
         if (isResumed()) {
@@ -79,7 +77,7 @@ public class MyPullRequestListFragment extends ListFragment implements LoaderMan
             setListShownNoAnimation(true);
         }		
 	}
-
+	
 	@Override
 	public void onLoaderReset(Loader<List<PullRequest>> arg0) {
 		mAdapter.clear();

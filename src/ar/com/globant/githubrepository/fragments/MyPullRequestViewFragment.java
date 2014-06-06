@@ -49,11 +49,11 @@ public class MyPullRequestViewFragment extends Fragment {
 	}
 	
 	private void setPassword(String pass) {
-		this.password = pass;
+		password = pass;
 	}
 	
 	private void setUsername(String user) {
-		this.username = user;
+		username = user;
 	}
 	
 	@Override
@@ -88,7 +88,7 @@ public class MyPullRequestViewFragment extends Fragment {
 	}
 	
     // AsyncTask
-    private static class PullRequestListTask extends AsyncTask<Repository, Void, List<PullRequest>> {
+    private class PullRequestListTask extends AsyncTask<Repository, Void, List<PullRequest>> {
         private MyPullRequestViewFragment mActivity;
         private List<PullRequest> results = null;
         
@@ -175,10 +175,8 @@ public class MyPullRequestViewFragment extends Fragment {
 				return pr1.getTitle() .compareToIgnoreCase(pr1.getTitle());
 			return 0;
 		}
-    	
     };
-
-
+    
 	public void notifyNoRepositorySelected() {
 		TextView mEditText = (TextView) view.findViewById(R.id.emptyText);
 		mEditText.setText("No repository selected!");

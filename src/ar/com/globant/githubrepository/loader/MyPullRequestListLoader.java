@@ -21,6 +21,7 @@ public class MyPullRequestListLoader extends AsyncTaskLoader<List<PullRequest>> 
 		private String user;
 		private String pass;
 		
+		
 		public MyPullRequestListLoader(Context context, Repository repo, String username, String password) {
 			super(context);
 			
@@ -29,7 +30,8 @@ public class MyPullRequestListLoader extends AsyncTaskLoader<List<PullRequest>> 
 			pass = password;
 		}
 		
-		@Override public List<PullRequest> loadInBackground() {
+		@Override 
+		public List<PullRequest> loadInBackground() {
 			
     		try {
     	    	PullRequestService servicePR = new PullRequestService();
@@ -44,7 +46,8 @@ public class MyPullRequestListLoader extends AsyncTaskLoader<List<PullRequest>> 
 	        return results;
 		}
 		
-		@Override public void deliverResult(List<PullRequest> list) {
+		@Override 
+		public void deliverResult(List<PullRequest> list) {
 		  if (isReset()) {
 		      if (list != null) {
 		          onReleaseResources(list);
@@ -62,7 +65,8 @@ public class MyPullRequestListLoader extends AsyncTaskLoader<List<PullRequest>> 
 		  }
 		}
 		
-		@Override protected void onStartLoading() {
+		@Override 
+		protected void onStartLoading() {
 		  if (mApps != null) {
 		      deliverResult(mApps);
 		  }
@@ -72,17 +76,20 @@ public class MyPullRequestListLoader extends AsyncTaskLoader<List<PullRequest>> 
 		  }
 		}
 		
-		@Override protected void onStopLoading() {
+		@Override 
+		protected void onStopLoading() {
 		  cancelLoad();
 		}
 		
-		@Override public void onCanceled(List<PullRequest> apps) {
+		@Override 
+		public void onCanceled(List<PullRequest> apps) {
 		  super.onCanceled(apps);
 		
 		  onReleaseResources(apps);
 		}
 		
-		@Override protected void onReset() {
+		@Override 
+		protected void onReset() {
 		  super.onReset();
 		}
 		

@@ -10,6 +10,7 @@ import ar.com.globant.githubrepository.R;
 
 public class MyDialogFragment extends DialogFragment {
 	
+	
     public static MyDialogFragment newInstance() {
         return new MyDialogFragment();
     }

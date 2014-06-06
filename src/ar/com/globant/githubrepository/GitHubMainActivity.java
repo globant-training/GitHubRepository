@@ -19,6 +19,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 	private EditText mEmailEdit = null;
 	private EditText mPasswordEdit = null;
 	private CheckBox mCheckShowPassword;
+	
 	private static GitHubClient client;
 	
     @Override
@@ -30,6 +31,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 		mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
 		
         mSigninButton = (Button) findViewById(R.id.signinButton);
+        // TODO Remove Anonymous Class
         mSigninButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -53,6 +55,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 		});
         
         mCheckShowPassword = (CheckBox)findViewById(R.id.checkShowPassword);
+        // TODO Remove Anonymous Class
         mCheckShowPassword.setOnClickListener(new OnClickListener() {
 			
 			@Override

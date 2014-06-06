@@ -26,6 +26,7 @@ public class MyRepoViewListFragment extends ListFragment implements LoaderManage
 	
 	static String name;
 	
+	
 	public static MyRepoViewListFragment newInstance(String username) {
 		
 		MyRepoViewListFragment lf = new MyRepoViewListFragment();

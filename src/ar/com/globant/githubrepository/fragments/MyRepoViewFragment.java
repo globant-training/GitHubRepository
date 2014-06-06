@@ -7,7 +7,6 @@ import java.util.Comparator;
 import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
-import org.eclipse.egit.github.core.RepositoryTag;
 import org.eclipse.egit.github.core.service.RepositoryService;
 
 import android.os.AsyncTask;
@@ -30,8 +29,8 @@ public class MyRepoViewFragment extends Fragment {
 	private ListView listaCustom = null;
 	private String username;
 	
-	private static List<WrapperItem> lista = new ArrayList<WrapperItem>();
-	private static List<Repository> listRepositories;
+	private List<WrapperItem> lista = new ArrayList<WrapperItem>();
+	private List<Repository> listRepositories;
 	
 	
 	public static MyRepoViewFragment newInstance(String titulo, String username) {
@@ -76,7 +75,8 @@ public class MyRepoViewFragment extends Fragment {
 	}
 	
     // AsyncTask
-    private static class RepoListTask extends AsyncTask<String, Void, List<Repository>> {
+    private class RepoListTask extends AsyncTask<String, Void, List<Repository>> {
+    	
         private MyRepoViewFragment mActivity;
         private List<Repository> results = null;
         
