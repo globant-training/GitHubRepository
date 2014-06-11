@@ -32,9 +32,12 @@ public class RepositoriesActivity extends FragmentActivity {
 	
 	private DialogFragment mDialogLoaging;
 	
+	private MergePRTask mt = null;
+	
 	private int myPullRequestViewFragment;
 	private Repository selectedRepo;
 	private boolean pressSelected = false;
+	
 	
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +82,12 @@ public class RepositoriesActivity extends FragmentActivity {
 		});
     }
     
+    @Override
+    protected void onResume() {
+    	super.onResume();
+    	
+        mt = (MergePRTask) getLastCustomNonConfigurationInstance();
+    }
 	
 	public void selectRepo(View v) {
 		pressSelected  = true;
@@ -110,7 +119,7 @@ public class RepositoriesActivity extends FragmentActivity {
 	}
 	
     public void mergePullRequest(PullRequest pr, String mergeMsj) throws IOException {
-    	MergePRTask mt = new MergePRTask(RepositoriesActivity.this);
+    	mt = new MergePRTask(RepositoriesActivity.this);
     	
     	mt.execute(pr);
     }
@@ -161,6 +170,13 @@ public class RepositoriesActivity extends FragmentActivity {
         }
     }
     
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+    	mt.detach();
+    	
+    	return mt;
+    }
+    
     private void smashResult(String message) {
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 	}
@@ -168,17 +184,17 @@ public class RepositoriesActivity extends FragmentActivity {
 	public int getMyPullRequestViewFragment() {
 		return myPullRequestViewFragment;
 	}
-
+	
 	public void setMyPullRequestViewFragment(int myPullRequestViewFragment) {
 		this.myPullRequestViewFragment = myPullRequestViewFragment;
 	}
-
-
+	
+	
 	public String getUsername() {
 		return username;
 	}
-
-
+	
+	
 	public void setUsername(String username) {
 		this.username = username;
 	}

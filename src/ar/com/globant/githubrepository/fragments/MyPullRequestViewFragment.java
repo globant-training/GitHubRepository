@@ -62,6 +62,13 @@ public class MyPullRequestViewFragment extends Fragment {
 	}
 	
 	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		setRetainInstance(true);
+	}
+	
+	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_textview, container, false);
 		
@@ -74,10 +81,6 @@ public class MyPullRequestViewFragment extends Fragment {
 		Log.e("INFO", "Creando el Fragment");
         
 		return view; 
-	}
-	
-	public void taskExecute() {
-		task.execute();
 	}
 	
 	@Override

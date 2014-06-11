@@ -27,10 +27,12 @@ public class MyRepoViewFragment extends Fragment {
 	private View view = null;
 	private ListRepoCustomAdapter adapter = null;
 	private ListView listaCustom = null;
-	private String username;
+	private String username = null;
 	
 	private List<WrapperItem> lista = new ArrayList<WrapperItem>();
 	private List<Repository> listRepositories;
+	
+	private RepoListTask task = null;
 	
 	
 	public static MyRepoViewFragment newInstance(String titulo, String username) {
@@ -50,13 +52,19 @@ public class MyRepoViewFragment extends Fragment {
 		this.username = username;
 	}
 	
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		setRetainInstance(true);
+		
+		task = new RepoListTask(MyRepoViewFragment.this);
+		task.execute(username);
+	}
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		view = inflater.inflate(R.layout.fragment_textview, container, false);
-		
-    	RepoListTask task = new RepoListTask(MyRepoViewFragment.this);
-		task.execute(username);
 		
 		listaCustom = (ListView) view.findViewById(R.id.listViewResult);
 		adapter = new ListRepoCustomAdapter(view.getContext(), R.layout.repo_request_row, lista);
@@ -66,6 +74,8 @@ public class MyRepoViewFragment extends Fragment {
 		
 		return view; 
 	}
+	
+	
 	
 	@Override
 	public void onDestroyView() {	
