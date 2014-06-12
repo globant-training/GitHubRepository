@@ -1,5 +1,7 @@
 package ar.com.globant.githubrepository.adapter;
 
+import java.util.Locale;
+
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
@@ -38,4 +40,17 @@ public class MyFragmentPageAdapter extends FragmentStatePagerAdapter {
 		return NUM_PAGES;
 	}
 	
+	@Override
+	public CharSequence getPageTitle(int position) {
+		Locale l = Locale.getDefault();
+		
+		switch (position) {
+		case 0:
+			return "Repositories";
+		case 1:
+			return "Pull Requests";
+		
+		}
+		return null;
+	}
 }

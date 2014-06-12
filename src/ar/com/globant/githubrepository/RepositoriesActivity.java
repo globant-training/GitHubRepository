@@ -11,10 +11,12 @@ import org.eclipse.egit.github.core.service.PullRequestService;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBar.Tab;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
@@ -22,7 +24,8 @@ import ar.com.globant.githubrepository.adapter.MyFragmentPageAdapter;
 import ar.com.globant.githubrepository.dialog.MyDialogFragment;
 import ar.com.globant.githubrepository.fragments.MyPullRequestViewFragment;
 
-public class RepositoriesActivity extends FragmentActivity {
+public class RepositoriesActivity extends ActionBarActivity implements ActionBar.TabListener{
+	
 	
 	private String username = null;
 	private String password = null;
@@ -42,6 +45,9 @@ public class RepositoriesActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
+        
+ 		final ActionBar actionBar = getSupportActionBar();
+ 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
         username = getIntent().getExtras().getString("username"); 
         password = getIntent().getExtras().getString("password");
@@ -68,6 +74,8 @@ public class RepositoriesActivity extends FragmentActivity {
 				}
 				
 				pressSelected = false;
+				
+				actionBar.setSelectedNavigationItem(pageNumber);
 			}
 			
 			@Override
@@ -80,9 +88,14 @@ public class RepositoriesActivity extends FragmentActivity {
 				
 			}
 		});
+		
+		for (int i = 0; i < adapterViewPage.getCount(); i++)
+			actionBar.addTab(actionBar.newTab().setText(adapterViewPage.getPageTitle(i))
+					                           .setTabListener(this));
     }
     
-    @Override
+    
+	@Override
     protected void onResume() {
     	super.onResume();
     	
@@ -225,5 +238,19 @@ public class RepositoriesActivity extends FragmentActivity {
 	
 	public void dialogDismiss(){
 		mDialogLoaging.dismiss();
+	}
+	
+	// ActionBar.TabListener methods
+	@Override
+	public void onTabReselected(Tab tab, FragmentTransaction ft) {
+	}
+	
+	@Override
+	public void onTabSelected(Tab tab, FragmentTransaction arg1) {
+		viewPager.setCurrentItem(tab.getPosition());
+	}
+	
+	@Override
+	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
 	}
 }

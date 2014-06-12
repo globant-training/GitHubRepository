@@ -4,7 +4,7 @@
     <string name="app_name">GitHubRepository</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
+	
     <string name="username">Username or Email</string>
     <string name="password">Password</string>
     <string name="signin">Sign in</string>
@@ -13,5 +13,9 @@
     <string name="show">Show password</string>
     
     <string name="no_mesj">-</string>
-
+	
+    <string name="login_error_msj">Login can\'t be blank</string>
+    
+    <string name="repo_list_title">Repositories</string>
+    <string name="pullrequest_list_title">Pull Request</string>
 </resources>

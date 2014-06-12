@@ -20,7 +20,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 	private EditText mPasswordEdit = null;
 	private CheckBox mCheckShowPassword;
 	
-	private static GitHubClient client;
+	private static GitHubClient client = null;
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +49,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 					intentPullRequest.putExtra("password", password);
 					startActivity(intentPullRequest);
 				} else {
-					Toast.makeText(getApplicationContext(), "Login can't be blank", Toast.LENGTH_SHORT).show();
+					Toast.makeText(getApplicationContext(), R.string.login_error_msj, Toast.LENGTH_SHORT).show();
 				}
 			}
 		});
