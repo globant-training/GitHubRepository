@@ -139,25 +139,29 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 		mDialogMerge.show(ft, "dialog");
 	}
 	
-	public void doMergeRepo() {
+	public void doMergeRepo(String commitText) {
 		try {
-			mergePullRequest(pullrequest, "");
+			mergePullRequest(pullrequest, commitText);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
     public void mergePullRequest(PullRequest pr, String mergeMsj) throws IOException {
-    	mt = new MergePRTask(RepositoriesActivity.this);
+    	mt = new MergePRTask(RepositoriesActivity.this, mergeMsj);
     	
     	mt.execute(pr);
     }
     
     // AsyncTask
     private class MergePRTask extends AsyncTask<PullRequest, Void, MergeStatus> {
+    	
         private RepositoriesActivity mActivity;
+        private String msj;
         
-    	public MergePRTask(RepositoriesActivity activity) {
+    	public MergePRTask(RepositoriesActivity activity, String mergeMsj) {
+    		msj = mergeMsj;
+    		
     		attach(activity);
 		}
     	
@@ -181,7 +185,7 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
     		MergeStatus status = null;
     		try {
 				if (service.getPullRequest(repoId, param[0].getNumber()).isMergeable())
-					status  = service.merge(repoId, param[0].getNumber(), "-");
+					status  = service.merge(repoId, param[0].getNumber(), msj);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

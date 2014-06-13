@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.RepositoriesActivity;
 
@@ -27,21 +28,25 @@ public class MyMergeDialogFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
     	
-        View v = inflater.inflate(R.layout.dialog_merge_layout, container, false);
+        View rootView = inflater.inflate(R.layout.dialog_merge_layout, container, false);
         
         // TODO Remove Anonymous Class
-        Button mergeButton = (Button) v.findViewById(R.id.mergeCommitMsjButton);
+        Button mergeButton = (Button) rootView.findViewById(R.id.mergeCommitMsjButton);
         mergeButton.setOnClickListener(new OnClickListener() {
 		
 			@Override
 			public void onClick(View v) {
-				mActivity.doMergeRepo();
+				EditText et = (EditText) v.getRootView().findViewById(R.id.commitMsjText);
+				
+				String commitText = et.getText().toString();
+				
+				mActivity.doMergeRepo(commitText);
 			}
 		});
         
         getDialog().setTitle(R.string.merge_title);
 
-        return v;
+        return rootView;
     }
 
 }
