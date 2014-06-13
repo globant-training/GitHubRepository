@@ -22,6 +22,7 @@ import android.widget.Button;
 import android.widget.Toast;
 import ar.com.globant.githubrepository.adapter.MyFragmentPageAdapter;
 import ar.com.globant.githubrepository.dialog.MyDialogFragment;
+import ar.com.globant.githubrepository.dialog.MyMergeDialogFragment;
 import ar.com.globant.githubrepository.fragments.MyPullRequestViewFragment;
 
 public class RepositoriesActivity extends ActionBarActivity implements ActionBar.TabListener{
@@ -34,12 +35,15 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 	private MyFragmentPageAdapter adapterViewPage;
 	
 	private DialogFragment mDialogLoaging;
+	private MyMergeDialogFragment mDialogMerge;
 	
 	private MergePRTask mt = null;
 	
 	private int myPullRequestViewFragment;
 	private Repository selectedRepo;
 	private boolean pressSelected = false;
+	
+	private PullRequest pullrequest = null;
 	
 	
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +98,12 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 					                           .setTabListener(this));
     }
     
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	
+    	mDialogLoaging = null;
+    }
     
 	@Override
     protected void onResume() {
@@ -118,12 +128,18 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 		viewPager.setCurrentItem(1, true);
 	}
 	
-	public void mergeRepo(View v) {	
-		PullRequest pullrequest = (PullRequest)v.getTag();
+	public void mergeRepo(View v) {
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 		
+		pullrequest = (PullRequest)v.getTag();
 		v.setEnabled(false);
 		
-		//TODO commit msj
+		mDialogMerge = MyMergeDialogFragment.newInstance();
+		mDialogMerge.setActivity(this);
+		mDialogMerge.show(ft, "dialog");
+	}
+	
+	public void doMergeRepo() {
 		try {
 			mergePullRequest(pullrequest, "");
 		} catch (IOException e) {
@@ -179,6 +195,8 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
         }
         
         protected void onPostExecute(MergeStatus status) {
+        	mActivity.dialogMergeDialogDismiss();
+        	
         	mActivity.smashResult(status.getMessage());
         }
     }
@@ -190,7 +208,12 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
     	return mt;
     }
     
-    private void smashResult(String message) {
+    public void dialogMergeDialogDismiss() {
+		mDialogMerge.dismiss();
+	}
+
+
+	private void smashResult(String message) {
 		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
 	}
     

@@ -18,4 +18,6 @@
     
     <string name="repo_list_title">Repositories</string>
     <string name="pullrequest_list_title">Pull Request</string>
+    
+    <string name="merge_title">Commit Messaje</string>
 </resources>
