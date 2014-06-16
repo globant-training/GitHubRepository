@@ -50,7 +50,6 @@ public class GitHubMainActivity extends ActionBarActivity {
 		});
         
         mCheckShowPassword = (CheckBox)findViewById(R.id.checkShowPassword);
-        // TODO Remove Anonymous Class
         mCheckShowPassword.setOnClickListener(new OnClickListener() {
 			
 			@Override

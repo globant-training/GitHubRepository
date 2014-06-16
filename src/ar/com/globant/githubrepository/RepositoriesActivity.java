@@ -23,7 +23,11 @@ import android.widget.Toast;
 import ar.com.globant.githubrepository.adapter.MyFragmentPageAdapter;
 import ar.com.globant.githubrepository.dialog.MyDialogFragment;
 import ar.com.globant.githubrepository.dialog.MyMergeDialogFragment;
+import ar.com.globant.githubrepository.events.PageSelectEvent;
 import ar.com.globant.githubrepository.fragments.MyPullRequestViewFragment;
+
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 public class RepositoriesActivity extends ActionBarActivity implements ActionBar.TabListener{
 	
@@ -45,12 +49,18 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 	
 	private PullRequest pullrequest = null;
 	
+	private Bus bus = new Bus();
+	
+	
+	
 	
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
         
- 		final ActionBar actionBar = getSupportActionBar();
+        bus.register(this);
+        
+        final ActionBar actionBar =  getSupportActionBar();
  		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         
         username = getIntent().getExtras().getString("username"); 
@@ -60,26 +70,11 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 		adapterViewPage = new MyFragmentPageAdapter(getSupportFragmentManager(), username, password);
 		viewPager.setAdapter(adapterViewPage);
 		
-        // TODO Remove Anonymous Class
 		viewPager.setOnPageChangeListener(new OnPageChangeListener() {
 			
 			@Override
 			public void onPageSelected(int pageNumber) {
-				if (pageNumber == 1 && pressSelected) {
-					
-					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-					mDialogLoaging = MyDialogFragment.newInstance();
-					mDialogLoaging.show(ft, "dialog");
-				} else if ( selectedRepo == null ){
-					int B = getMyPullRequestViewFragment();
-					MyPullRequestViewFragment myPullRequestViewFragment = (MyPullRequestViewFragment) getSupportFragmentManager().findFragmentById(B);
-					
-					myPullRequestViewFragment.notifyNoRepositorySelected();
-				}
-				
-				pressSelected = false;
-				
-				actionBar.setSelectedNavigationItem(pageNumber);
+				bus.post(new PageSelectEvent(pageNumber, actionBar));
 			}
 			
 			@Override
@@ -98,10 +93,33 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 					                           .setTabListener(this));
     }
     
+    @Subscribe
+    public void handlerViewPagerPageSelect(PageSelectEvent e) {
+    	int pageNumber = e.getPageNumber();
+    	
+    	if (pageNumber == 1 && pressSelected) {
+			
+			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+			mDialogLoaging = MyDialogFragment.newInstance();
+			mDialogLoaging.show(ft, "dialog");
+		} else if ( selectedRepo == null ) {
+			int B = getMyPullRequestViewFragment();
+			MyPullRequestViewFragment myPullRequestViewFragment = (MyPullRequestViewFragment) getSupportFragmentManager().findFragmentById(B);
+			
+			myPullRequestViewFragment.notifyNoRepositorySelected();
+		}
+		
+		pressSelected = false;
+		
+		e.getActionBar().setSelectedNavigationItem(pageNumber);
+    }
+    
     @Override
     protected void onDestroy() {
     	super.onDestroy();
     	
+       	bus.unregister(this);
+
     	mDialogLoaging = null;
     }
     
