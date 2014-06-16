@@ -2,6 +2,8 @@ package ar.com.globant.githubrepository.adapter;
 
 import java.util.List;
 
+import org.eclipse.egit.github.core.PullRequest;
+
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,5 +54,12 @@ public class ListPullRequestCustomAdapter extends ArrayAdapter<WrapperPRItem> {
 	public static class ItemHolder {
 		TextView mTextTitle;
 		Button mButton;
+	}
+
+	public void setData(List<PullRequest> data) {
+		for (PullRequest pr : data) 
+			lista.add(new WrapperPRItem(pr.getTitle(), pr));
+		
+		notifyDataSetChanged();
 	}
 }

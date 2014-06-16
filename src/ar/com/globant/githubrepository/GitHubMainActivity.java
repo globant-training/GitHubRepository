@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
+import ar.com.globant.githubrepository.events.CheckButtonEvent;
+import ar.com.globant.githubrepository.events.SignInButtonEvent;
+
+import com.squareup.otto.Bus;
+import com.squareup.otto.Subscribe;
 
 public class GitHubMainActivity extends ActionBarActivity {
 
@@ -19,13 +24,19 @@ public class GitHubMainActivity extends ActionBarActivity {
 	private EditText mEmailEdit = null;
 	private EditText mPasswordEdit = null;
 	private CheckBox mCheckShowPassword;
-	private static GitHubClient client;
+	
+	private static GitHubClient client = null;
+	
+	private Bus bus = new Bus();
+	
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
+        bus.register(this);
+        
         mEmailEdit = (EditText) findViewById(R.id.emailEdit);
 		mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
 		
@@ -34,21 +45,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 			
 			@Override
 			public void onClick(View v) {
-				
-				String username = new String(mEmailEdit.getText().toString());
-				String password = new String(mPasswordEdit.getText().toString());
-				
-				if (!username.isEmpty() && !password.isEmpty()) {
-					client = new GitHubClient();
-					client.setCredentials(username, password);
-					
-					Intent intentPullRequest = new Intent(getApplicationContext(), RepositoriesActivity.class);
-					intentPullRequest.putExtra("username", username);
-					intentPullRequest.putExtra("password", password);
-					startActivity(intentPullRequest);
-				} else {
-					Toast.makeText(getApplicationContext(), "Login can't be blank", Toast.LENGTH_SHORT).show();
-				}
+				bus.post(new SignInButtonEvent(this));
 			}
 		});
         
@@ -57,12 +54,42 @@ public class GitHubMainActivity extends ActionBarActivity {
 			
 			@Override
 			public void onClick(View v) {
-				if ( ((CheckBox)v).isChecked() ) {
-					mPasswordEdit.setTransformationMethod(null);
-				} else {
-					mPasswordEdit.setTransformationMethod(new PasswordTransformationMethod());
-				}
+				bus.post(new CheckButtonEvent(v));
 			}
 		});
+    }
+    
+    @Subscribe
+    public void handlerSignInButtonPress(SignInButtonEvent e) {
+    	String username = new String(mEmailEdit.getText().toString());
+		String password = new String(mPasswordEdit.getText().toString());
+		
+		if (!username.isEmpty() && !password.isEmpty()) {
+			client = new GitHubClient();
+			client.setCredentials(username, password);
+			
+			Intent intentPullRequest = new Intent(getApplicationContext(), RepositoriesActivity.class);
+			intentPullRequest.putExtra("username", username);
+			intentPullRequest.putExtra("password", password);
+			startActivity(intentPullRequest);
+		} else {
+			Toast.makeText(getApplicationContext(), R.string.login_error_msj, Toast.LENGTH_SHORT).show();
+		}
+    }
+    
+    @Subscribe
+    public void handleShowPassword(CheckButtonEvent e) {
+    	if ( ((CheckBox)e.getView()).isChecked() ) {
+			mPasswordEdit.setTransformationMethod(null);
+		} else {
+			mPasswordEdit.setTransformationMethod(new PasswordTransformationMethod());
+		}
+    }
+    
+    @Override
+    protected void onDestroy() {
+       	super.onDestroy();
+       	
+       	bus.unregister(this);
     }
 }
