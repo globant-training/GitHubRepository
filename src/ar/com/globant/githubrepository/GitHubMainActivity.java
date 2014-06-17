@@ -70,5 +70,10 @@ public class GitHubMainActivity extends ActionBarActivity {
 		});
     }
     
-    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	
+    	Crouton.cancelAllCroutons();
+    }
 }

@@ -16,6 +16,8 @@ import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.adapter.ListRepoCustomAdapter;
 import ar.com.globant.githubrepository.loader.MyRepoListLoader;
 import ar.com.globant.globant.model.WrapperItem;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 
 public class MyRepoViewListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Repository>>{
@@ -61,17 +63,30 @@ public class MyRepoViewListFragment extends ListFragment implements LoaderManage
 	@Override
 	public void onLoadFinished(Loader<List<Repository>> arg0, List<Repository> data) {
 		
-		mAdapter.setData(data);
-		
-        if (isResumed()) {
-            setListShown(true);
+		if ( data != null && !data.isEmpty() ) {
+	        if (isResumed()) {
+	            setListShown(true);
+	        } else {
+	            setListShownNoAnimation(true);
+	        }
         } else {
-            setListShownNoAnimation(true);
-        }		
+        	Crouton.makeText(getActivity(), R.string.repo_and_user_error, Style.ALERT).show();
+        	
+        	data = new ArrayList<Repository>();
+        }
+		
+		mAdapter.setData(data);
 	}
 	
 	@Override
 	public void onLoaderReset(Loader<List<Repository>> arg0) {
 		mAdapter.clear();
+	}
+	
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		
+		Crouton.cancelAllCroutons();
 	}
 }

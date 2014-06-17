@@ -104,6 +104,8 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
     protected void onDestroy() {
     	super.onDestroy();
     	
+    	Crouton.cancelAllCroutons();
+    	
     	mDialogLoaging = null;
     }
     

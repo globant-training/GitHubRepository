@@ -82,6 +82,8 @@ public class MyRepoViewFragment extends Fragment {
 	public void onDestroyView() {	
 		super.onDestroyView();
 		
+		Crouton.cancelAllCroutons();
+		
 		Log.e("INFO", "Destruyendo el Fragment");
 	}
 	
@@ -140,7 +142,7 @@ public class MyRepoViewFragment extends Fragment {
     public void setErrorMsj(int msj) {
     	Crouton.makeText(getActivity(), msj, Style.ALERT).show();
 	}
-
+    
 	private void setListResults(List<Repository> results) {
     	toMyList(results, false);
     }
@@ -156,7 +158,7 @@ public class MyRepoViewFragment extends Fragment {
 	}
     
     public static final Comparator<Repository> REPOSITORY_COMPARATOR = new Comparator<Repository>() {
-
+    	
 		@Override
 		public int compare(Repository repo1, Repository repo2) {
 			if ( repo1 != null && repo2 != null )
