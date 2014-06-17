@@ -63,17 +63,17 @@ public class MyRepoViewListFragment extends ListFragment implements LoaderManage
 	@Override
 	public void onLoadFinished(Loader<List<Repository>> arg0, List<Repository> data) {
 		
-		if ( data != null && !data.isEmpty() ) {
-	        if (isResumed()) {
-	            setListShown(true);
-	        } else {
-	            setListShownNoAnimation(true);
-	        }
-        } else {
+		if ( data == null ) {
         	Crouton.makeText(getActivity(), R.string.repo_and_user_error, Style.ALERT).show();
         	
         	data = new ArrayList<Repository>();
-        }
+		}
+		
+		if (isResumed()) {
+			setListShown(true);
+		} else {
+			setListShownNoAnimation(true);
+		}
 		
 		mAdapter.setData(data);
 	}
