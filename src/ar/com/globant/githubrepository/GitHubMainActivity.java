@@ -11,7 +11,8 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class GitHubMainActivity extends ActionBarActivity {
 
@@ -49,7 +50,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 					intentPullRequest.putExtra("password", password);
 					startActivity(intentPullRequest);
 				} else {
-					Toast.makeText(getApplicationContext(), R.string.login_error_msj, Toast.LENGTH_SHORT).show();
+					Crouton.makeText(GitHubMainActivity.this, R.string.login_error_msj, Style.ALERT).show();
 				}
 			}
 		});

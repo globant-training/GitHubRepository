@@ -8,6 +8,8 @@ import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.service.PullRequestService;
 
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -218,7 +220,7 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 
 
 	private void smashResult(String message) {
-		Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+		Crouton.makeText(RepositoriesActivity.this, message, Style.INFO).show();
 	}
     
 	public int getMyPullRequestViewFragment() {

@@ -20,4 +20,6 @@
     <string name="pullrequest_list_title">Pull Request</string>
     
     <string name="merge_title">Commit Messaje</string>
+    
+    <string name="repo_and_user_error">Repositories not Found or User no exist!</string>
 </resources>

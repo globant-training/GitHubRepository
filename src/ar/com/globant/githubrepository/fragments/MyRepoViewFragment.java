@@ -17,10 +17,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
-import android.widget.Toast;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.adapter.ListRepoCustomAdapter;
 import ar.com.globant.globant.model.WrapperItem;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class MyRepoViewFragment extends Fragment {
 	
@@ -132,12 +133,12 @@ public class MyRepoViewFragment extends Fragment {
         	if (result != null)
         		mActivity.setListResults(result);
         	else
-				mActivity.setErrorMsj("Repositories not Found or User no exist!");
+				mActivity.setErrorMsj(R.string.repo_and_user_error);
         }
     }
     
-    public void setErrorMsj(String msj) {
-		Toast.makeText(getActivity().getApplicationContext(), msj, Toast.LENGTH_LONG).show();
+    public void setErrorMsj(int msj) {
+    	Crouton.makeText(getActivity(), msj, Style.ALERT).show();
 	}
 
 	private void setListResults(List<Repository> results) {
