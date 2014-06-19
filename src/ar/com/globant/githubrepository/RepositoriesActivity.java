@@ -71,7 +71,6 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 					
 					FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
 					mDialogLoaging = MyDialogFragment.newInstance();
-					mDialogLoaging.setStyle(DialogFragment.STYLE_NORMAL, R.style.MyDialogStyle);
 					mDialogLoaging.show(ft, "dialog");
 				} else if ( selectedRepo == null ){
 					int B = getMyPullRequestViewFragment();
