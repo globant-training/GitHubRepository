@@ -50,6 +50,8 @@ public class MyRepoViewListFragment extends ListFragment implements LoaderManage
 		mAdapter = new ListRepoCustomAdapter(getActivity(), R.layout.repo_request_row, apps);
 		setListAdapter(mAdapter);
 		
+		setEmptyText(getResources().getText(R.string.repo_and_user_error));
+		
 		setListShown(false);
 		
         getLoaderManager().initLoader(0, null, this);
