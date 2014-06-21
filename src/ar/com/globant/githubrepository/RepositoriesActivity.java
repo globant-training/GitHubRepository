@@ -8,8 +8,7 @@ import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.service.PullRequestService;
 
-import de.keyboardsurfer.android.widget.crouton.Crouton;
-import de.keyboardsurfer.android.widget.crouton.Style;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -19,13 +18,15 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBar.Tab;
 import android.support.v7.app.ActionBarActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 import ar.com.globant.githubrepository.adapter.MyFragmentPageAdapter;
 import ar.com.globant.githubrepository.dialog.MyDialogFragment;
 import ar.com.globant.githubrepository.dialog.MyMergeDialogFragment;
 import ar.com.globant.githubrepository.fragments.MyPullRequestViewFragment;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
 public class RepositoriesActivity extends ActionBarActivity implements ActionBar.TabListener{
 	
@@ -54,6 +55,7 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
         
  		final ActionBar actionBar = getSupportActionBar();
  		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+ 		actionBar.setHomeButtonEnabled(true);
         
         username = getIntent().getExtras().getString("username"); 
         password = getIntent().getExtras().getString("password");
@@ -283,5 +285,23 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 	
 	@Override
 	public void onTabUnselected(Tab arg0, FragmentTransaction arg1) {
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			Intent intent = new Intent(this, GitHubMainActivity.class);
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			
+			startActivity(intent);
+			
+			break;
+
+		default:
+			break;
+		}
+		
+		return super.onOptionsItemSelected(item);
 	}
 }
