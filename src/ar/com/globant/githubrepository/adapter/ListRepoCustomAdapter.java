@@ -1,5 +1,6 @@
 package ar.com.globant.githubrepository.adapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
@@ -10,15 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.globant.model.WrapperItem;
 
-public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
+public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> implements Filterable {
 	
 	private Context mContext;
 	private List<WrapperItem> lista;
+	private List<WrapperItem> orgLista;
 	private int layout;
+	
+	private RepoFilter filter;
 	
 	
 	public ListRepoCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> lista) {
@@ -27,6 +33,7 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 		this.layout = textViewResourceId;
 		this.mContext = myViewFragment;
 		this.lista = lista;
+		this.orgLista = lista;
 	}
 	
 	@Override
@@ -80,5 +87,68 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> {
 									  repo,
 									  repo.getDescription(),
 									  repo.getLanguage()));
+	}
+	
+	@Override
+	public int getCount() {
+		return lista.size();
+	}
+	
+	@Override
+	public WrapperItem getItem(int position) {
+		return lista.get(position);
+	}
+	
+	@Override
+	public long getItemId(int position) {
+		return lista.get(position).hashCode();
+	}
+	
+	private void resetData() {
+		lista = orgLista;
+	}
+	
+	private class RepoFilter extends Filter {
+
+		@Override
+		protected FilterResults performFiltering(CharSequence constraint) {
+			FilterResults results = new FilterResults();
+			
+			if ( constraint == null ) {
+				results.values = orgLista;
+				results.count  = orgLista.size();
+			} else {
+				List<WrapperItem> list = new ArrayList<WrapperItem>();
+				
+				for ( WrapperItem element : lista )
+					if ( element.getTitle().toUpperCase().indexOf(constraint.toString().toUpperCase()) >= 0 )
+						list.add(element);
+				
+				results.values = list;
+				results.count  = list.size();
+			}
+			
+			return results;
+		}
+		
+		@Override
+		protected void publishResults(CharSequence constraint, FilterResults results) {
+			if ( results.count == 0 ) {
+				notifyDataSetInvalidated();
+			} else {
+				lista = (List<WrapperItem>) results.values;
+				
+				notifyDataSetChanged();
+			}
+		}
+		
+	}
+	
+	@Override
+	public Filter getFilter() {
+		if ( filter == null )
+			filter = new RepoFilter();
+		
+		return filter;
 	}
 }

@@ -9,7 +9,13 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v7.widget.SearchView;
+import android.support.v7.widget.SearchView.OnQueryTextListener;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import ar.com.globant.githubrepository.R;
@@ -20,11 +26,13 @@ import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
 
-public class MyRepoViewListFragment extends ListFragment implements LoaderManager.LoaderCallbacks<List<Repository>>{
+public class MyRepoViewListFragment extends ListFragment implements OnQueryTextListener, LoaderManager.LoaderCallbacks<List<Repository>>{
 
 	static List<WrapperItem> apps = new ArrayList<WrapperItem>(){};
 	
 	ListRepoCustomAdapter mAdapter;
+
+	private Object mFilter;
 	
 	static String name;
 	
@@ -50,9 +58,9 @@ public class MyRepoViewListFragment extends ListFragment implements LoaderManage
 		mAdapter = new ListRepoCustomAdapter(getActivity(), R.layout.repo_request_row, apps);
 		setListAdapter(mAdapter);
 		
-		setEmptyText(getResources().getText(R.string.repo_and_user_error));
-		
 		setListShown(false);
+		
+		setHasOptionsMenu(true);
 		
         getLoaderManager().initLoader(0, null, this);
 	}
@@ -90,5 +98,31 @@ public class MyRepoViewListFragment extends ListFragment implements LoaderManage
 		super.onDestroy();
 		
 		Crouton.cancelAllCroutons();
+	}
+	
+    @Override 
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        MenuItem item = menu.add("Search");
+        item.setIcon(android.R.drawable.ic_menu_search);
+        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
+                		   | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
+        SearchView sv = new SearchView(getActivity());
+        sv.setOnQueryTextListener(this);
+        item.setActionView(sv);
+    }
+	
+	@Override
+	public boolean onQueryTextChange(String newText) {
+		
+        String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
+        
+        mAdapter.getFilter().filter(newFilter);
+        
+		return true;
+	}
+	
+	@Override
+	public boolean onQueryTextSubmit(String arg0) {
+		return true;
 	}
 }
