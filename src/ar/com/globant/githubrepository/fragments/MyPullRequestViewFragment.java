@@ -117,7 +117,7 @@ public class MyPullRequestViewFragment extends Fragment {
     	    	// TODO traer credenciales de modelo
     			servicePR.getClient().setCredentials(username, password);
     			
-    			return servicePR.getPullRequests(param[0], "open");
+    			results = servicePR.getPullRequests(param[0], "open");
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -138,11 +138,11 @@ public class MyPullRequestViewFragment extends Fragment {
     }
     
     private void setListResults(List<PullRequest> results) {
+    	lista.clear();
+    	
     	if (results != null && !results.isEmpty()) {
     		toMyList(results, false);
     	} else {
-    		lista.clear();
-    		
     		TextView mEditText = (TextView) view.findViewById(R.id.emptyText);
     		mEditText.setText("No Open Pull Request found in '" + repository.getName() + "'");
 

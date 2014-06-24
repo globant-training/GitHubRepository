@@ -28,6 +28,8 @@ public class GitHubMainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setTitle(null);
+        
         mEmailEdit = (EditText) findViewById(R.id.emailEdit);
 		mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
 		

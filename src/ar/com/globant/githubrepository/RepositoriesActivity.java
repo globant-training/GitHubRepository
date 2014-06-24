@@ -53,6 +53,8 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_screen_slide);
         
+        setTitle(null);
+        
  		final ActionBar actionBar = getSupportActionBar();
  		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
  		actionBar.setHomeButtonEnabled(true);

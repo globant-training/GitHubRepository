@@ -109,6 +109,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
                 		   | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
         SearchView sv = new SearchView(getActivity());
         sv.setOnQueryTextListener(this);
+        sv.setQueryHint("Search Repository");
         item.setActionView(sv);
     }
 	
