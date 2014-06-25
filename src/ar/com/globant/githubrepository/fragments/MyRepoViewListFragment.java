@@ -9,7 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v7.app.ActionBar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.text.TextUtils;
@@ -32,8 +32,6 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	static List<WrapperItem> apps = new ArrayList<WrapperItem>(){};
 	
 	ListRepoCustomAdapter mAdapter;
-
-	private Object mFilter;
 	
 	static String name;
 	
@@ -103,16 +101,26 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	
     @Override 
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        MenuItem item = menu.add("Search");
-        item.setIcon(android.R.drawable.ic_menu_search);
-        item.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM
-                		   | MenuItem.SHOW_AS_ACTION_COLLAPSE_ACTION_VIEW);
-        SearchView sv = new SearchView(getActivity());
-        sv.setOnQueryTextListener(this);
-        sv.setQueryHint("Search Repository");
-        item.setActionView(sv);
+    	inflater.inflate(R.menu.menu, menu);
+    	
+    	MenuItem item = menu.findItem(R.id.action_search);
+    	SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+    	searchView.setOnQueryTextListener(this);
+    	
+    	super.onCreateOptionsMenu(menu, inflater);
     }
 	
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+    	switch (item.getItemId()) {
+			case R.id.action_refresh:
+				getLoaderManager().restartLoader(0, null, this);
+				return true;
+			default:
+				return super.onOptionsItemSelected(item);
+		}
+    }
+    
 	@Override
 	public boolean onQueryTextChange(String newText) {
 		
