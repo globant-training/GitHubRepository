@@ -106,6 +106,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
     	MenuItem item = menu.findItem(R.id.action_search);
     	SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
     	searchView.setOnQueryTextListener(this);
+    	searchView.setQueryHint(getResources().getText(R.string.search));
     	
     	super.onCreateOptionsMenu(menu, inflater);
     }

@@ -24,4 +24,6 @@
     <string name="repo_and_user_error">Repositories not Found or User no exist!</string>
     
     <string name="loading">Loading...</string>
+    
+    <string name="search">Search Repository</string>
 </resources>
