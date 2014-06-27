@@ -215,7 +215,8 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
     
     @Override
     public Object onRetainCustomNonConfigurationInstance() {
-    	mt.detach();
+    	if ( mt != null )
+    		mt.detach();
     	
     	return mt;
     }

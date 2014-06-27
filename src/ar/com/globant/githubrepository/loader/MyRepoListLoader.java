@@ -15,7 +15,7 @@ public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 	    
 		private List<Repository> listRepositories;
 		private String name;
-	
+		
 		private List<Repository> results = null;
 	    
 		private List<Repository> myList;

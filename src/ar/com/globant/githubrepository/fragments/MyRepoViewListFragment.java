@@ -44,7 +44,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		
 		return lf; 
 	}
-		
+	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		return super.onCreateView(inflater, container, savedInstanceState);
@@ -84,6 +84,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 			setListShownNoAnimation(true);
 		}
 		
+		mAdapter.clear();
 		mAdapter.setData(data);
 	}
 	
@@ -95,6 +96,8 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		
+		
 		
 		Crouton.cancelAllCroutons();
 	}
@@ -115,6 +118,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 			case R.id.action_refresh:
+				
 				getLoaderManager().restartLoader(0, null, this);
 				return true;
 			default:
