@@ -13,8 +13,9 @@
     <string name="show">Show password</string>
     
     <string name="no_mesj">-</string>
-	
-    <string name="login_error_msj">Login can\'t be blank</string>
+    
+    <string name="login_username_error_msj">Username can\'t be blank</string>
+    <string name="login_password_error_msj">Password can\'t be blank</string>
     
     <string name="repo_list_title">Repositories</string>
     <string name="pullrequest_list_title">Pull Request</string>

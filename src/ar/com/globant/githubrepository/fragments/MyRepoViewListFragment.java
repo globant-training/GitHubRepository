@@ -59,6 +59,8 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		
 		setListShown(false);
 		
+		setEmptyText(getResources().getText(R.string.repo_and_user_error));
+		
 		setHasOptionsMenu(true);
 		
         getLoaderManager().initLoader(0, null, this);

@@ -43,7 +43,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 				String username = new String(mEmailEdit.getText().toString());
 				String password = new String(mPasswordEdit.getText().toString());
 				
-				if (!username.isEmpty() && !password.isEmpty()) {
+				if ( !username.isEmpty() && !password.isEmpty() ) {
 					client = new GitHubClient();
 					client.setCredentials(username, password);
 					
@@ -51,9 +51,13 @@ public class GitHubMainActivity extends ActionBarActivity {
 					intentPullRequest.putExtra("username", username);
 					intentPullRequest.putExtra("password", password);
 					startActivity(intentPullRequest);
-				} else {
-					Crouton.makeText(GitHubMainActivity.this, R.string.login_error_msj, Style.ALERT).show();
-				}
+				} else { 
+						if ( username.isEmpty() ) {
+							Crouton.makeText(GitHubMainActivity.this, R.string.login_username_error_msj, Style.ALERT).show();
+						} else {
+							Crouton.makeText(GitHubMainActivity.this, R.string.login_password_error_msj, Style.ALERT).show();
+						}
+				} 
 			}
 		});
         

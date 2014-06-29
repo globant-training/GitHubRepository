@@ -58,6 +58,7 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
  		final ActionBar actionBar = getSupportActionBar();
  		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
  		actionBar.setHomeButtonEnabled(true);
+ 		actionBar.setDisplayHomeAsUpEnabled(true);
         
         username = getIntent().getExtras().getString("username"); 
         password = getIntent().getExtras().getString("password");
