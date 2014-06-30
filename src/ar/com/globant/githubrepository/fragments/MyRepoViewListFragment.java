@@ -32,6 +32,8 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	static List<WrapperItem> apps = new ArrayList<WrapperItem>(){};
 	
 	ListRepoCustomAdapter mAdapter;
+
+	private MenuItem refreshMenuItem;
 	
 	static String name;
 	
@@ -74,6 +76,11 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	@Override
 	public void onLoadFinished(Loader<List<Repository>> arg0, List<Repository> data) {
 		
+		if ( refreshMenuItem != null ) {
+			refreshMenuItem.collapseActionView();
+			refreshMenuItem.setActionView(null);
+		}
+		
 		if ( data == null ) {
         	Crouton.makeText(getActivity(), R.string.repo_and_user_error, Style.ALERT).show();
         	
@@ -88,6 +95,8 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		
 		mAdapter.clear();
 		mAdapter.setData(data);
+		
+		mAdapter.notifyDataSetChanged();
 	}
 	
 	@Override
@@ -98,8 +107,6 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		
-		
 		
 		Crouton.cancelAllCroutons();
 	}
@@ -120,6 +127,10 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
     public boolean onOptionsItemSelected(MenuItem item) {
     	switch (item.getItemId()) {
 			case R.id.action_refresh:
+				
+				refreshMenuItem = item;
+				refreshMenuItem.setActionView(R.layout.action_progressbar);
+				refreshMenuItem.expandActionView();
 				
 				getLoaderManager().restartLoader(0, null, this);
 				return true;

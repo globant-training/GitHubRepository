@@ -27,13 +27,13 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> implements 
 	private RepoFilter filter;
 	
 	
-	public ListRepoCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> lista) {
-		super(myViewFragment, textViewResourceId, lista);
+	public ListRepoCustomAdapter(Context myViewFragment, int textViewResourceId, List<WrapperItem> list) {
+		super(myViewFragment, textViewResourceId, list);
 		
 		this.layout = textViewResourceId;
 		this.mContext = myViewFragment;
-		this.lista = lista;
-		this.orgLista = lista;
+		this.lista = list;
+		this.orgLista = list;
 	}
 	
 	@Override
