@@ -4,12 +4,27 @@
     <string name="app_name">GitHubRepository</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-
-    <string name="username">Username or Email</string>
+	
+    <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="signin">Sign in</string>
     <string name="select">Select</string>
     <string name="merge">Merge</string>
     <string name="show">Show password</string>
-
+    
+    <string name="no_mesj">-</string>
+    
+    <string name="login_username_error_msj">Username can\'t be blank</string>
+    <string name="login_password_error_msj">Password can\'t be blank</string>
+    
+    <string name="repo_list_title">Repositories</string>
+    <string name="pullrequest_list_title">Pull Request</string>
+    
+    <string name="merge_title">Commit Messaje</string>
+    
+    <string name="repo_and_user_error">Repositories not Found or User no exist!</string>
+    
+    <string name="loading">Loading...</string>
+    
+    <string name="search">Search Repository</string>
 </resources>

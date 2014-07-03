@@ -1,35 +1,66 @@
 package ar.com.globant.githubrepository;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.egit.github.core.client.GitHubClient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Toast;
+import de.keyboardsurfer.android.widget.crouton.Crouton;
+import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class GitHubMainActivity extends ActionBarActivity {
+public class GitHubMainActivity extends ActionBarActivity implements OnItemClickListener {
 
 	private Button mSigninButton;
-	private EditText mEmailEdit = null;
+	private AutoCompleteTextView mEmailEdit = null;
 	private EditText mPasswordEdit = null;
 	private CheckBox mCheckShowPassword;
-	private static GitHubClient client;
+	
+	public SharedPreferences sp;
+	
+	private static GitHubClient client = null;
+	
+	private static String[] usernames = new String[] {
+       
+    };
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        mEmailEdit = (EditText) findViewById(R.id.emailEdit);
-		mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
+        
+        setTitle(null);
+        
+        // TODO Refactor
+        sp = this.getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
+        Map<String, ?> map = sp.getAll();
+        Set<String> keys = map.keySet();
+        usernames = keys.toArray(new String[keys.size()]);
+        
+        mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
+        mEmailEdit = (AutoCompleteTextView) findViewById(R.id.emailEdit);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+																android.R.layout.simple_dropdown_item_1line, 
+																usernames);
+		mEmailEdit.setAdapter(adapter);
+		mEmailEdit.setOnItemClickListener(this);
 		
         mSigninButton = (Button) findViewById(R.id.signinButton);
+        // TODO Remove Anonymous Class
         mSigninButton.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -38,7 +69,7 @@ public class GitHubMainActivity extends ActionBarActivity {
 				String username = new String(mEmailEdit.getText().toString());
 				String password = new String(mPasswordEdit.getText().toString());
 				
-				if (!username.isEmpty() && !password.isEmpty()) {
+				if ( !username.isEmpty() && !password.isEmpty() ) {
 					client = new GitHubClient();
 					client.setCredentials(username, password);
 					
@@ -46,13 +77,18 @@ public class GitHubMainActivity extends ActionBarActivity {
 					intentPullRequest.putExtra("username", username);
 					intentPullRequest.putExtra("password", password);
 					startActivity(intentPullRequest);
-				} else {
-					Toast.makeText(getApplicationContext(), "Login can't be blank", Toast.LENGTH_SHORT).show();
-				}
+				} else { 
+						if ( username.isEmpty() ) {
+							Crouton.makeText(GitHubMainActivity.this, R.string.login_username_error_msj, Style.ALERT).show();
+						} else {
+							Crouton.makeText(GitHubMainActivity.this, R.string.login_password_error_msj, Style.ALERT).show();
+						}
+				} 
 			}
 		});
         
         mCheckShowPassword = (CheckBox)findViewById(R.id.checkShowPassword);
+        // TODO Remove Anonymous Class
         mCheckShowPassword.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -65,4 +101,19 @@ public class GitHubMainActivity extends ActionBarActivity {
 			}
 		});
     }
+    
+    @Override
+    protected void onDestroy() {
+    	super.onDestroy();
+    	
+    	Crouton.cancelAllCroutons();
+    }
+    
+    // OnItemClickListener method
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		String value = sp.getString(parent.getItemAtPosition(position).toString(), "");
+		if ( value != null && value.length() > 0 )
+			mPasswordEdit.setText( value );
+	}
 }
