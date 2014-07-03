@@ -1,37 +1,63 @@
 package ar.com.globant.githubrepository;
 
+import java.util.Map;
+import java.util.Set;
+
 import org.eclipse.egit.github.core.client.GitHubClient;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.PasswordTransformationMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
-public class GitHubMainActivity extends ActionBarActivity {
+public class GitHubMainActivity extends ActionBarActivity implements OnItemClickListener {
 
 	private Button mSigninButton;
-	private EditText mEmailEdit = null;
+	private AutoCompleteTextView mEmailEdit = null;
 	private EditText mPasswordEdit = null;
 	private CheckBox mCheckShowPassword;
 	
+	public SharedPreferences sp;
+	
 	private static GitHubClient client = null;
+	
+	private static String[] usernames = new String[] {
+       
+    };
 	
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        
         setTitle(null);
         
-        mEmailEdit = (EditText) findViewById(R.id.emailEdit);
-		mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
+        // TODO Refactor
+        sp = this.getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
+        Map<String, ?> map = sp.getAll();
+        Set<String> keys = map.keySet();
+        usernames = keys.toArray(new String[keys.size()]);
+        
+        mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
+        mEmailEdit = (AutoCompleteTextView) findViewById(R.id.emailEdit);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+																android.R.layout.simple_dropdown_item_1line, 
+																usernames);
+		mEmailEdit.setAdapter(adapter);
+		mEmailEdit.setOnItemClickListener(this);
 		
         mSigninButton = (Button) findViewById(R.id.signinButton);
         // TODO Remove Anonymous Class
@@ -82,4 +108,12 @@ public class GitHubMainActivity extends ActionBarActivity {
     	
     	Crouton.cancelAllCroutons();
     }
+    
+    // OnItemClickListener method
+	@Override
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		String value = sp.getString(parent.getItemAtPosition(position).toString(), "");
+		if ( value != null && value.length() > 0 )
+			mPasswordEdit.setText( value );
+	}
 }

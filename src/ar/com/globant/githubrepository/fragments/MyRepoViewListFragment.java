@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -36,13 +38,15 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	private MenuItem refreshMenuItem;
 	
 	static String name;
+	static String pass;
 	
 	
-	public static MyRepoViewListFragment newInstance(String username) {
+	public static MyRepoViewListFragment newInstance(String username, String password) {
 		
 		MyRepoViewListFragment lf = new MyRepoViewListFragment();
 		
 		name = username;
+		pass = password;
 		
 		return lf; 
 	}
@@ -85,6 +89,12 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
         	Crouton.makeText(getActivity(), R.string.repo_and_user_error, Style.ALERT).show();
         	
         	data = new ArrayList<Repository>();
+		} else {
+			SharedPreferences sp = getActivity().getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
+			SharedPreferences.Editor editor = sp.edit();
+			
+			editor.putString(name, pass);
+			editor.commit();
 		}
 		
 		if (isResumed()) {
