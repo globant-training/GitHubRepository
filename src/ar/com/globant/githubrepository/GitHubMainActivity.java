@@ -45,11 +45,7 @@ public class GitHubMainActivity extends ActionBarActivity implements OnItemClick
         
         setTitle(null);
         
-        // TODO Refactor
-        sp = this.getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
-        Map<String, ?> map = sp.getAll();
-        Set<String> keys = map.keySet();
-        usernames = keys.toArray(new String[keys.size()]);
+        usernames = getUser();
         
         mPasswordEdit = (EditText) findViewById(R.id.passwordEdit);
         mEmailEdit = (AutoCompleteTextView) findViewById(R.id.emailEdit);
@@ -102,7 +98,15 @@ public class GitHubMainActivity extends ActionBarActivity implements OnItemClick
 		});
     }
     
-    @Override
+    private String[] getUser() {
+    	// TODO Refactor
+    	sp = this.getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
+        Set<String> keys = sp.getAll().keySet();
+        
+        return keys.toArray(new String[keys.size()]);
+	}
+
+	@Override
     protected void onDestroy() {
     	super.onDestroy();
     	
