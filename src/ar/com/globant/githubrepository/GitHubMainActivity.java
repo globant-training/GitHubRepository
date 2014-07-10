@@ -99,8 +99,7 @@ public class GitHubMainActivity extends ActionBarActivity implements OnItemClick
     }
     
     private String[] getUser() {
-    	// TODO Refactor
-    	sp = this.getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
+    	sp = this.getSharedPreferences(getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
         Set<String> keys = sp.getAll().keySet();
         
         return keys.toArray(new String[keys.size()]);

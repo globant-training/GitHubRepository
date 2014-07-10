@@ -90,7 +90,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
         	
         	data = new ArrayList<Repository>();
 		} else {
-			SharedPreferences sp = getActivity().getSharedPreferences("ar.com.globant.githubrepository", Context.MODE_PRIVATE);
+			SharedPreferences sp = getActivity().getSharedPreferences(getActivity().getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
 			SharedPreferences.Editor editor = sp.edit();
 			
 			editor.putString(name, pass);
