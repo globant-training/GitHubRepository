@@ -122,7 +122,8 @@ public class MyPullRequestViewFragment extends Fragment {
 				e1.printStackTrace();
 			}
     		
-    		Collections.sort(results, PULLREQUEST_COMPARATOR);
+    		if ( results != null && results.size() > 0)
+    			Collections.sort(results, PULLREQUEST_COMPARATOR);
 
             return results;
         }

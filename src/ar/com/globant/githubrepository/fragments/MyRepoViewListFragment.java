@@ -5,8 +5,8 @@ import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
 
-import android.content.Context;
-import android.content.SharedPreferences;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -23,7 +23,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.adapter.ListRepoCustomAdapter;
+import ar.com.globant.githubrepository.contentprovider.MyGitHubContentProvider;
 import ar.com.globant.githubrepository.loader.MyRepoListLoader;
+import ar.com.globant.githubrepository.sql.MySQLiteHelper;
 import ar.com.globant.globant.model.WrapperItem;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -90,11 +92,13 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
         	
         	data = new ArrayList<Repository>();
 		} else {
-			SharedPreferences sp = getActivity().getSharedPreferences(getActivity().getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = sp.edit();
-			
-			editor.putString(name, pass);
-			editor.commit();
+			if ( !userExist(name) ) {
+				ContentValues cv = new ContentValues();
+				cv.put(MySQLiteHelper.GITHUB_COLUMNA_USERNAME, name);
+				cv.put(MySQLiteHelper.GITHUB_COLUMNA_PASSWORD, pass);
+				
+				getActivity().getContentResolver().insert(MyGitHubContentProvider.CONTENT_URI, cv);
+			}
 		}
 		
 		if (isResumed()) {
@@ -109,6 +113,26 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		mAdapter.notifyDataSetChanged();
 	}
 	
+	private boolean userExist(String name) {
+		String[] columns = new String[] { MySQLiteHelper.GITHUB_ID,
+				MySQLiteHelper.GITHUB_COLUMNA_USERNAME,
+				MySQLiteHelper.GITHUB_COLUMNA_PASSWORD };
+		
+		Cursor cursor = getActivity().getContentResolver().query(MyGitHubContentProvider.CONTENT_URI,
+																 columns, null, null, null);
+		
+		if ( cursor != null ) {
+			while ( cursor.moveToNext() )
+				if ( name.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex(MySQLiteHelper.GITHUB_COLUMNA_USERNAME))) ) {
+					cursor.close();
+					
+					return true;
+				}
+		}
+		
+		return false;
+	}
+
 	@Override
 	public void onLoaderReset(Loader<List<Repository>> arg0) {
 		mAdapter.clear();

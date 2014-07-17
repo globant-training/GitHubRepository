@@ -27,4 +27,6 @@
     <string name="loading">Loading...</string>
     
     <string name="search">Search Repository</string>
+    
+    <string name="app_label"></string>
 </resources>
