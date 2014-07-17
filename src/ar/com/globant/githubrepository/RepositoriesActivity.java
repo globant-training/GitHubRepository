@@ -8,7 +8,9 @@ import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.service.PullRequestService;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -55,14 +57,20 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
         
         setTitle(null);
         
+        SharedPreferences sp = this.getSharedPreferences(getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
+        username = getIntent().getExtras().getString("username");
+        if ( username == null )
+        	username = sp.getString("username", null);
+        
+        password = getIntent().getExtras().getString("password");
+        if ( password == null )
+        	password = sp.getString("password", null);
+        
  		final ActionBar actionBar = getSupportActionBar();
  		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
  		actionBar.setHomeButtonEnabled(true);
  		actionBar.setDisplayHomeAsUpEnabled(true);
-        
-        username = getIntent().getExtras().getString("username"); 
-        password = getIntent().getExtras().getString("password");
-        
+ 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		adapterViewPage = new MyFragmentPageAdapter(getSupportFragmentManager(), username, password);
 		viewPager.setAdapter(adapterViewPage);
@@ -103,6 +111,18 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 		for (int i = 0; i < adapterViewPage.getCount(); i++)
 			actionBar.addTab(actionBar.newTab().setText(adapterViewPage.getPageTitle(i))
 					                           .setTabListener(this));
+    }
+    
+    @Override
+    protected void onStop() {
+		SharedPreferences sp = getSharedPreferences(getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
+		
+		editor.putString("username", username);
+		editor.putString("password", password);
+		editor.commit();
+		
+    	super.onStop();
     }
     
     @Override
