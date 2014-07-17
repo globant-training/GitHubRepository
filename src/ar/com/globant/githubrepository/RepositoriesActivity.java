@@ -106,6 +106,28 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
     }
     
     @Override
+    protected void onStop() {
+    	
+    	super.onStop();
+    }
+    
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+    	outState.putString("username", username);
+    	outState.putString("password", password);
+    	
+    	super.onSaveInstanceState(outState);
+    }
+    
+	@Override
+	protected void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+		
+		username = savedInstanceState.getString("username");
+		password = savedInstanceState.getString("password");
+	}
+    
+    @Override
     protected void onDestroy() {
     	super.onDestroy();
     	

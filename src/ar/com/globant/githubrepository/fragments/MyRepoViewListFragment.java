@@ -5,13 +5,15 @@ import java.util.List;
 
 import org.eclipse.egit.github.core.Repository;
 
+import android.app.SearchManager;
+import android.app.SearchableInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.SearchView.OnQueryTextListener;
 import android.text.TextUtils;
@@ -22,6 +24,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import ar.com.globant.githubrepository.R;
+import ar.com.globant.githubrepository.RepositoriesActivity;
 import ar.com.globant.githubrepository.adapter.ListRepoCustomAdapter;
 import ar.com.globant.githubrepository.loader.MyRepoListLoader;
 import ar.com.globant.globant.model.WrapperItem;
@@ -125,10 +128,17 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
     	inflater.inflate(R.menu.menu, menu);
     	
+    	SearchManager searchManager = (SearchManager)getActivity().getSystemService(Context.SEARCH_SERVICE);
+        SearchableInfo si = searchManager.getSearchableInfo( new ComponentName(getActivity().getApplicationContext(), RepositoriesActivity.class) );
+        
+        List<SearchableInfo> searchables = searchManager.getSearchablesInGlobalSearch();
+        
     	MenuItem item = menu.findItem(R.id.action_search);
-    	SearchView searchView = (SearchView) MenuItemCompat.getActionView(item);
+    	SearchView searchView = (SearchView) item.getActionView();
+    	searchView.setSearchableInfo(si);
     	searchView.setOnQueryTextListener(this);
     	searchView.setQueryHint(getResources().getText(R.string.search));
+    	
     	
     	super.onCreateOptionsMenu(menu, inflater);
     }
