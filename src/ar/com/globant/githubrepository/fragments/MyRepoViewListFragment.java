@@ -8,8 +8,9 @@ import org.eclipse.egit.github.core.Repository;
 import android.app.SearchManager;
 import android.app.SearchableInfo;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
@@ -26,7 +27,9 @@ import android.view.ViewGroup;
 import ar.com.globant.githubrepository.R;
 import ar.com.globant.githubrepository.RepositoriesActivity;
 import ar.com.globant.githubrepository.adapter.ListRepoCustomAdapter;
+import ar.com.globant.githubrepository.contentprovider.MyGitHubContentProvider;
 import ar.com.globant.githubrepository.loader.MyRepoListLoader;
+import ar.com.globant.githubrepository.sql.MySQLiteHelper;
 import ar.com.globant.globant.model.WrapperItem;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -56,6 +59,8 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 	
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		((RepositoriesActivity)getActivity()).setMyRepoViewListFragment(getId());
+		
 		return super.onCreateView(inflater, container, savedInstanceState);
 	}
 	
@@ -72,7 +77,7 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		
 		setHasOptionsMenu(true);
 		
-        getLoaderManager().initLoader(0, null, this);
+		getLoaderManager().initLoader(0, null, this);
 	}
 	
 	@Override
@@ -93,11 +98,13 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
         	
         	data = new ArrayList<Repository>();
 		} else {
-			SharedPreferences sp = getActivity().getSharedPreferences(getActivity().getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
-			SharedPreferences.Editor editor = sp.edit();
-			
-			editor.putString(name, pass);
-			editor.commit();
+			if ( !userExist(name) ) {
+				ContentValues cv = new ContentValues();
+				cv.put(MySQLiteHelper.GITHUB_COLUMNA_USERNAME, name);
+				cv.put(MySQLiteHelper.GITHUB_COLUMNA_PASSWORD, pass);
+				
+				getActivity().getContentResolver().insert(MyGitHubContentProvider.CONTENT_URI, cv);
+			}
 		}
 		
 		if (isResumed()) {
@@ -109,9 +116,34 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		mAdapter.clear();
 		mAdapter.setData(data);
 		
+		// Voice Speak Filter
+		String searchVoiceText = ((RepositoriesActivity)getActivity()).getSearchVoiceText();
+		if ( searchVoiceText != null && !searchVoiceText.isEmpty() )
+			doFilter( searchVoiceText );
+		
 		mAdapter.notifyDataSetChanged();
 	}
 	
+	private boolean userExist(String name) {
+		String[] columns = new String[] { MySQLiteHelper.GITHUB_ID,
+				MySQLiteHelper.GITHUB_COLUMNA_USERNAME,
+				MySQLiteHelper.GITHUB_COLUMNA_PASSWORD };
+		
+		Cursor cursor = getActivity().getContentResolver().query(MyGitHubContentProvider.CONTENT_URI,
+																 columns, null, null, null);
+		
+		if ( cursor != null ) {
+			while ( cursor.moveToNext() )
+				if ( name.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex(MySQLiteHelper.GITHUB_COLUMNA_USERNAME))) ) {
+					cursor.close();
+					
+					return true;
+				}
+		}
+		
+		return false;
+	}
+
 	@Override
 	public void onLoaderReset(Loader<List<Repository>> arg0) {
 		mAdapter.clear();
@@ -139,7 +171,6 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
     	searchView.setOnQueryTextListener(this);
     	searchView.setQueryHint(getResources().getText(R.string.search));
     	
-    	
     	super.onCreateOptionsMenu(menu, inflater);
     }
 	
@@ -164,9 +195,13 @@ public class MyRepoViewListFragment extends ListFragment implements OnQueryTextL
 		
         String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
         
-        mAdapter.getFilter().filter(newFilter);
+        doFilter(newFilter);
         
 		return true;
+	}
+	
+	public void doFilter(String newFilter) {
+		mAdapter.getFilter().filter(newFilter);
 	}
 	
 	@Override

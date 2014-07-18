@@ -108,8 +108,9 @@ public class ListRepoCustomAdapter extends ArrayAdapter<WrapperItem> implements 
 		lista = orgLista;
 	}
 	
+	// My Custom Filter
 	private class RepoFilter extends Filter {
-
+		
 		@Override
 		protected FilterResults performFiltering(CharSequence constraint) {
 			FilterResults results = new FilterResults();

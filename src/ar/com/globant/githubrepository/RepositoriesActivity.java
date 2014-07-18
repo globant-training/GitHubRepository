@@ -8,7 +8,10 @@ import org.eclipse.egit.github.core.Repository;
 import org.eclipse.egit.github.core.RepositoryId;
 import org.eclipse.egit.github.core.service.PullRequestService;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
@@ -43,10 +46,12 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 	private MergePRTask mt = null;
 	
 	private int myPullRequestViewFragment;
+	private int myRepoViewListFragment;
 	private Repository selectedRepo;
 	private boolean pressSelected = false;
 	
 	private PullRequest pullrequest = null;
+	private String searchVoiceText = null;
 	
 	
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,14 +60,20 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
         
         setTitle(null);
         
+        SharedPreferences sp = this.getSharedPreferences(getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
+        username = getIntent().getExtras().getString("username");
+        if ( username == null )
+        	username = sp.getString("username", null);
+        
+        password = getIntent().getExtras().getString("password");
+        if ( password == null )
+        	password = sp.getString("password", null);
+        
  		final ActionBar actionBar = getSupportActionBar();
  		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
  		actionBar.setHomeButtonEnabled(true);
  		actionBar.setDisplayHomeAsUpEnabled(true);
-        
-        username = getIntent().getExtras().getString("username"); 
-        password = getIntent().getExtras().getString("password");
-        
+ 		
 		viewPager = (ViewPager) findViewById(R.id.pager);
 		adapterViewPage = new MyFragmentPageAdapter(getSupportFragmentManager(), username, password);
 		viewPager.setAdapter(adapterViewPage);
@@ -106,26 +117,27 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
     }
     
     @Override
-    protected void onStop() {
+    protected void onStart() {
+    	super.onStart();
     	
-    	super.onStop();
+    	// Search Voice 
+        final Intent queryIntent = getIntent();
+        final String queryAction = getIntent().getAction();
+        if ( Intent.ACTION_SEARCH.equals( queryAction ) )
+            setSearchVoiceText( queryIntent.getStringExtra(SearchManager.QUERY) );
     }
     
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
-    	outState.putString("username", username);
-    	outState.putString("password", password);
-    	
-    	super.onSaveInstanceState(outState);
-    }
-    
-	@Override
-	protected void onRestoreInstanceState(Bundle savedInstanceState) {
-		super.onRestoreInstanceState(savedInstanceState);
+    protected void onStop() {
+		SharedPreferences sp = getSharedPreferences(getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
+		SharedPreferences.Editor editor = sp.edit();
 		
-		username = savedInstanceState.getString("username");
-		password = savedInstanceState.getString("password");
-	}
+		editor.putString("username", username);
+		editor.putString("password", password);
+		editor.commit();
+		
+    	super.onStop();
+    }
     
     @Override
     protected void onDestroy() {
@@ -248,7 +260,6 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 		mDialogMerge.dismiss();
 	}
 
-
 	private void smashResult(String message) {
 		Crouton.makeText(RepositoriesActivity.this, message, Style.INFO).show();
 	}
@@ -261,31 +272,41 @@ public class RepositoriesActivity extends ActionBarActivity implements ActionBar
 		this.myPullRequestViewFragment = myPullRequestViewFragment;
 	}
 	
+	public int getMyRepoViewListFragment() {
+		return myPullRequestViewFragment;
+	}
 	
+	public void setMyRepoViewListFragment(int myRepoViewListFragment) {
+		this.myRepoViewListFragment = myRepoViewListFragment;
+	}
+	
+	public String getSearchVoiceText() {
+		return searchVoiceText;
+	}
+
+	public void setSearchVoiceText(String searchVoiceText) {
+		this.searchVoiceText = searchVoiceText;
+	}
+
 	public String getUsername() {
 		return username;
 	}
-	
 	
 	public void setUsername(String username) {
 		this.username = username;
 	}
 
-
 	public String getPassword() {
 		return password;
 	}
-
 
 	public void setPassword(String password) {
 		this.password = password;
 	}
 
-
 	public Repository getSelectedRepo() {
 		return selectedRepo;
 	}
-
 
 	public void setSelectedRepo(Repository selectedRepo) {
 		this.selectedRepo = selectedRepo;

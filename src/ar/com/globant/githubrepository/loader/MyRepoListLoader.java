@@ -12,12 +12,12 @@ import android.util.Log;
 
 
 public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
-	    
+		
 		private List<Repository> listRepositories;
 		private String name;
 		
 		private List<Repository> results = null;
-	    
+		
 		private List<Repository> myList;
 		
 		
@@ -30,7 +30,7 @@ public class MyRepoListLoader extends AsyncTaskLoader<List<Repository>> {
 		@Override 
 		public List<Repository> loadInBackground() {
 			RepositoryService service = new RepositoryService();
-	    	
+			
 			try {
 				listRepositories =  service.getRepositories(name);
 				

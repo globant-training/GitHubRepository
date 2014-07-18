@@ -1,6 +1,6 @@
 package ar.com.globant.githubrepository;
 
-import java.util.Map;
+import java.util.ArrayList;
 import java.util.Set;
 
 import org.eclipse.egit.github.core.client.GitHubClient;
@@ -8,6 +8,7 @@ import org.eclipse.egit.github.core.client.GitHubClient;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.text.method.PasswordTransformationMethod;
@@ -20,6 +21,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import ar.com.globant.githubrepository.contentprovider.MyGitHubContentProvider;
+import ar.com.globant.githubrepository.sql.MySQLiteHelper;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -98,13 +101,6 @@ public class GitHubMainActivity extends ActionBarActivity implements OnItemClick
 		});
     }
     
-    private String[] getUser() {
-    	sp = this.getSharedPreferences(getApplicationContext().getPackageName(), Context.MODE_PRIVATE);
-        Set<String> keys = sp.getAll().keySet();
-        
-        return keys.toArray(new String[keys.size()]);
-	}
-
 	@Override
     protected void onDestroy() {
     	super.onDestroy();
@@ -115,8 +111,49 @@ public class GitHubMainActivity extends ActionBarActivity implements OnItemClick
     // OnItemClickListener method
 	@Override
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-		String value = sp.getString(parent.getItemAtPosition(position).toString(), "");
-		if ( value != null && value.length() > 0 )
-			mPasswordEdit.setText( value );
+		String username = parent.getItemAtPosition(position).toString();
+		String password = findPasswordByUser(username);
+		
+		if ( password != null && password.length() > 0 )
+			mPasswordEdit.setText( password );
+	}
+	
+	private String[] getUser() {
+		Cursor cursor = getUserFromContentProvider();
+
+		ArrayList<String> users = new ArrayList<String>(cursor.getCount());
+		if (cursor != null) {
+			for (cursor.moveToFirst(); !cursor.isAfterLast(); cursor
+					.moveToNext())
+				users.add(cursor.getString(cursor
+						.getColumnIndex(MySQLiteHelper.GITHUB_COLUMNA_USERNAME)));
+
+			cursor.close();
+		}
+
+		return users.toArray(new String[cursor.getCount()]);
+	}
+	 
+	private Cursor getUserFromContentProvider() {
+		String[] columns = new String[] { MySQLiteHelper.GITHUB_ID,
+				MySQLiteHelper.GITHUB_COLUMNA_USERNAME,
+				MySQLiteHelper.GITHUB_COLUMNA_PASSWORD };
+		
+		return getContentResolver().query(MyGitHubContentProvider.CONTENT_URI,
+											columns, null, null, null);
+	}
+	
+	private String findPasswordByUser(String username) {
+		Cursor cursor = getUserFromContentProvider();
+		
+		if ( cursor != null ) {
+        	for ( cursor.moveToFirst(); !cursor.isAfterLast() ; cursor.moveToNext() ) 
+        		if ( username.equalsIgnoreCase(cursor.getString(cursor.getColumnIndex(MySQLiteHelper.GITHUB_COLUMNA_USERNAME))) )
+        			return cursor.getString(cursor.getColumnIndex(MySQLiteHelper.GITHUB_COLUMNA_PASSWORD));
+        	
+        	cursor.close();
+        }
+		
+		return null;
 	}
 }
