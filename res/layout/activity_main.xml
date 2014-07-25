@@ -6,73 +6,71 @@
     tools:context="ar.com.globant.githubrepository.GitHubMainActivity"
     tools:ignore="MergeRootFrame" >
 
-    <TextView
-        android:id="@+id/emailTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:textStyle="bold"
-        android:text="@string/username" />
-
-    <EditText
-        android:id="@+id/emailEdit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/emailTextView"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:inputType="textEmailAddress" >
-
-        <requestFocus />
-
-    </EditText>
-
-    <TextView
-        android:id="@+id/passwordTextView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_alignParentLeft="true"
-        android:textStyle="bold"
-        android:layout_marginLeft="10dp"
-        android:layout_below="@+id/emailEdit"
-        android:text="@string/password" />
-
     <EditText
         android:id="@+id/passwordEdit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
+        android:layout_above="@+id/signinButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/passwordTextView"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/round"
         android:ems="10"
-        android:inputType="textPassword" />
+        android:inputType="textPassword"
+        android:padding="5dp"
+        android:hint="@string/password"
+        android:textColor="@android:color/black" />
+
+    <AutoCompleteTextView
+        android:id="@+id/emailEdit"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_above="@+id/passwordEdit"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/round"
+		android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:ems="10"
+        android:inputType="textEmailAddress"
+        android:padding="5dp"
+        android:hint="@string/username"
+        android:textColor="@android:color/black"
+        android:completionThreshold="1">
+        <requestFocus />
+     </AutoCompleteTextView>
+   	
 
     <Button
         android:id="@+id/signinButton"
         android:layout_width="wrap_content"
-        android:layout_marginTop="10dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/passwordEdit"
-        android:layout_centerHorizontal="true"
-        android:text="@string/signin" 
-        android:background="@drawable/aqua_pin"/>
+        android:layout_above="@+id/checkShowPassword"
+        android:layout_alignLeft="@+id/passwordEdit"
+        android:layout_alignRight="@+id/passwordEdit"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/aqua_pin"
+        android:text="@string/signin" />
 
     <CheckBox
         android:id="@+id/checkShowPassword"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/signinButton"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="270dp"
         android:text="@string/show" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:text="GitHubRepository"
+        android:textSize="30dp" />
 
 </RelativeLayout>
